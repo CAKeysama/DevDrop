@@ -1,19 +1,11 @@
-# 🛠️ DevDrop
+Copyright (c) 2026 DevDrop All rights reserved. / Todos os direitos reservados.
 
-Um hub centralizado de ferramentas e utilitários projetado para facilitar a vida de desenvolvedores e usuários comuns. De geradores de senhas seguras a formatadores de JSON, tudo em uma interface limpa, rápida e sem distrações.
+ENGLISH:
+This project and its source code are proprietary. No part of this software, including but not limited to code, design, and assets, may be copied, modified, distributed, or used in any form or by any means, electronic or mechanical, without the express written permission of the copyright owner.
 
-## 🚀 Funcionalidades
+If you wish to use, study, or adapt any part of this project, you must first contact the author to obtain explicit permission.
 
-O projeto é dividido em categorias para facilitar a navegação:
+PORTUGUÊS:
+Este projeto e seu código-fonte são proprietários. Nenhuma parte deste software, incluindo, mas não se limitando a código, design e recursos, pode ser copiada, modificada, distribuída ou utilizada de qualquer forma ou por qualquer meio, eletrônico ou mecânico, sem a permissão expressa e por escrito do proprietário dos direitos autorais.
 
-### 💻 Para Desenvolvedores
-*   **Formatadores e Validadores:** JSON, XML, SQL.
-*   **Codificação/Decodificação:** Base64, URL Encode/Decode, JWT Decoder.
-*   **Geradores de Dados Mock:** UUID, Lorem Ipsum, hashes (MD5, SHA-256).
-*   **CSS Tools:** Gerador de sombras, gradientes e bordas.
-
-### 🌐 Para Usuários do Dia a Dia
-*   **Segurança:** Gerador de senhas fortes e verificador de força de senha.
-*   **Documentos (Dev/Teste):** Gerador e validador de CPF/CNPJ.
-*   **Texto:** Contador de caracteres, palavras e conversor de maiúsculas/minúsculas.
-*   **Matemática/Finanças:** Calculadora de porcentagem e regras de três.
+Se você deseja usar, estudar ou adaptar qualquer parte deste projeto, você deve primeiro entrar em contato com o autor para obter permissão explícita.
