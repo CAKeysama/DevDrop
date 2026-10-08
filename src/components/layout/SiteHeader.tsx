@@ -12,12 +12,18 @@ export function SiteHeader() {
         <LogoMark />
         <span className="font-display text-[17px] font-medium tracking-tight text-ink">DevDrop</span>
       </Link>
-      <nav aria-label="Principal" className="flex items-center gap-1">
+      <nav aria-label="Principal" className="flex items-center gap-1 sm:gap-2">
+        <Link
+          to="/tools"
+          className="rounded-full px-3 py-1.5 text-[12px] font-semibold text-slate-500 transition-colors hover:text-ink"
+        >
+          Ferramentas
+        </Link>
         <a
           href={links.docs}
           target="_blank"
           rel="noreferrer"
-          className="rounded-full px-4 py-2 text-[12px] font-semibold text-slate-500 transition-colors hover:text-[#0a1b33]"
+          className="rounded-full px-3 py-1.5 text-[12px] font-semibold text-slate-500 transition-colors hover:text-ink"
         >
           Docs<span className="sr-only"> (abre em nova aba)</span>
         </a>

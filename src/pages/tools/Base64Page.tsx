@@ -6,6 +6,7 @@ import {
   CodeOutput,
   ErrorMessage,
   ExampleButton,
+  PasteButton,
   ToolShell,
 } from '../../components/tools/shared'
 import {
@@ -14,7 +15,6 @@ import {
   decodeBase64,
   encodeBase64,
 } from '../../lib/codecs/base64'
-import { surfacePill } from '../../components/ui/styles'
 import { cn } from '../../lib/cn'
 
 type Mode = 'encode' | 'decode'
@@ -61,7 +61,6 @@ export default function Base64Page() {
   function handleModeChange(nextMode: Mode) {
     if (nextMode === mode) return
     setMode(nextMode)
-    // Invert input and output if there is already output
     if (output) {
       setInput(output)
       processConversion(output, nextMode)
@@ -82,92 +81,108 @@ export default function Base64Page() {
     processConversion(exampleVal, mode)
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault()
+      processConversion(input, mode)
+    }
+  }
+
   return (
     <ToolShell
-      title="Codificador e Decodificador Base64"
-      description="Converta textos para Base64 e vice-versa diretamente no navegador com suporte completo a caracteres UTF-8 e emojis."
+      toolId="base64"
+      title="Base64"
+      description="Codifica texto em Base64 e decodifica Base64 em texto, com suporte a Unicode."
       categoryId="developer"
       metaDescription="Codifique e decodifique Base64 online com suporte total a Unicode e UTF-8. Rápido, seguro e 100% executado no cliente."
-      actions={
-        <>
-          <ExampleButton onLoadExample={handleLoadExample} />
-          <ClearButton onClear={handleClear} disabled={!input && !output} />
-        </>
-      }
     >
       <div className="flex flex-col gap-6">
-        {/* Mode Selector Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-5">
-          <div className="flex items-center gap-2">
-            <span className="text-[13px] font-semibold text-slate-500">Operação:</span>
-            <div className="inline-flex rounded-full bg-slate-100 p-1">
-              <button
-                type="button"
-                onClick={() => handleModeChange('encode')}
-                className={cn(
-                  'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-all',
-                  mode === 'encode'
-                    ? 'bg-navy text-white shadow-sm'
-                    : 'text-slate-600 hover:text-ink',
-                )}
-              >
-                Texto → Base64 (Codificar)
-              </button>
-              <button
-                type="button"
-                onClick={() => handleModeChange('decode')}
-                className={cn(
-                  'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-all',
-                  mode === 'decode'
-                    ? 'bg-navy text-white shadow-sm'
-                    : 'text-slate-600 hover:text-ink',
-                )}
-              >
-                Base64 → Texto (Decodificar)
-              </button>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => handleModeChange(mode === 'encode' ? 'decode' : 'encode')}
-            className={cn(
-              surfacePill,
-              'inline-flex cursor-pointer items-center gap-1.5 px-3 py-1.5 text-[12px] font-semibold text-slate-700 hover:text-ink',
-            )}
-          >
-            <ArrowRightLeft className="size-3.5" aria-hidden="true" />
-            <span>Inverter modo</span>
-          </button>
-        </div>
-
         {/* Error message */}
         {error && <ErrorMessage title="Erro na conversão Base64" error={error} />}
 
-        {/* Workspace: 2 columns */}
+        {/* 2-Column Responsive Workspace */}
         <div className="grid gap-6 lg:grid-cols-2">
+          {/* Left Column: Input Card */}
           <CodeInput
             id="base64-input"
-            label={mode === 'encode' ? 'Texto Original (UTF-8)' : 'Código Base64'}
+            label={mode === 'encode' ? 'Texto de entrada' : 'Base64 de entrada'}
             value={input}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             placeholder={
               mode === 'encode'
                 ? 'Digite ou cole o texto que deseja codificar…'
                 : 'Cole o código Base64 para decodificar (ex: SGVsbG8gV29ybGQ=)…'
             }
             error={error}
+            actions={
+              <>
+                <ExampleButton onLoadExample={handleLoadExample} label="Exemplo" />
+                <PasteButton onPaste={(text) => handleInputChange(text)} />
+                <ClearButton onClear={handleClear} disabled={!input && !output} />
+              </>
+            }
+            footer={
+              <div className="flex flex-col gap-4">
+                <p className="text-[12px] text-slate-400">
+                  Atalho: <kbd className="font-sans font-medium text-slate-600">Ctrl + Enter</kbd> (
+                  <kbd className="font-sans font-medium text-slate-600">⌘ + Enter</kbd> no Mac) executa a ação principal.
+                </p>
+
+                {/* Mode Selector */}
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-[12px] font-medium text-slate-500">Operação</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleModeChange('encode')}
+                      className={cn(
+                        'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-all',
+                        mode === 'encode'
+                          ? 'bg-[#0a152d] text-white shadow-sm'
+                          : 'border border-slate-200/80 bg-white text-slate-600 hover:text-ink',
+                      )}
+                    >
+                      Texto → Base64 (Codificar)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleModeChange('decode')}
+                      className={cn(
+                        'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-all',
+                        mode === 'decode'
+                          ? 'bg-[#0a152d] text-white shadow-sm'
+                          : 'border border-slate-200/80 bg-white text-slate-600 hover:text-ink',
+                      )}
+                    >
+                      Base64 → Texto (Decodificar)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleModeChange(mode === 'encode' ? 'decode' : 'encode')}
+                      className="cursor-pointer inline-flex items-center gap-1 rounded-full border border-slate-200/80 bg-white px-3 py-1.5 text-[12px] font-semibold text-slate-600 hover:text-ink transition-all"
+                    >
+                      <ArrowRightLeft className="size-3" aria-hidden="true" />
+                      <span>Inverter</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
           />
 
+          {/* Right Column: Output Card */}
           <CodeOutput
             id="base64-output"
-            label={mode === 'encode' ? 'Resultado em Base64' : 'Texto Decodificado'}
+            label="Resultado"
             value={output}
             placeholder={
               mode === 'encode'
                 ? 'O Base64 resultante aparecerá aqui…'
                 : 'O texto decodificado aparecerá aqui…'
             }
+            filename={mode === 'encode' ? 'devdrop-base64.txt' : 'devdrop-texto.txt'}
+            mimeType="text/plain"
           />
         </div>
       </div>

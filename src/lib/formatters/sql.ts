@@ -54,6 +54,20 @@ export async function formatSql(input: string, options: SqlFormatOptions = {}): 
   }
 }
 
+export function compactSql(input: string): FormatResult {
+  const trimmed = input.trim()
+  if (!trimmed) {
+    return { result: '', error: 'A entrada está vazia. Insira uma consulta SQL para compactar.' }
+  }
+
+  const withoutComments = trimmed
+    .replace(/--.*$/gm, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+
+  const compacted = withoutComments.replace(/\s+/g, ' ').trim()
+  return { result: compacted }
+}
+
 export const SQL_SEMANTIC_NOTICE =
   'Nota: O formatador organiza a sintaxe, palavras-chave e quebras de linha da query. Ele não executa validação semântica de esquemas, tabelas ou colunas.'
 

@@ -1,63 +1,74 @@
 import { useId, type ReactNode } from 'react'
 import { cn } from '../../../lib/cn'
 import { CopyButton } from './CopyButton'
+import { DownloadButton } from './DownloadButton'
 
 interface CodeOutputProps {
-  value: string
+  id?: string
   label?: string
+  value: string
   placeholder?: string
   actions?: ReactNode
+  footer?: ReactNode
+  filename?: string
+  mimeType?: string
   className?: string
-  id?: string
+  minHeight?: string
 }
 
 export function CodeOutput({
-  value,
+  id: explicitId,
   label = 'Resultado',
+  value,
   placeholder = 'O resultado formatado aparecerá aqui…',
   actions,
+  footer,
+  filename = 'devdrop-resultado.txt',
+  mimeType = 'text/plain',
   className,
-  id: explicitId,
+  minHeight = 'min-h-[220px] md:min-h-[260px]',
 }: CodeOutputProps) {
   const generatedId = useId()
   const outputId = explicitId || generatedId
 
-  const lineCount = value ? value.split('\n').length : 0
-  const charCount = value.length
-
   return (
-    <div className={cn('flex flex-col gap-2', className)}>
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <label htmlFor={outputId} className="text-[13px] font-semibold text-ink">
-          {label}
-        </label>
-        <div className="flex items-center gap-2">
-          {value && (
-            <span className="text-[11px] font-medium text-slate-600 sm:text-[12px]">
-              {lineCount} {lineCount === 1 ? 'linha' : 'linhas'} • {charCount} carac.
-            </span>
-          )}
-          {actions}
-          <CopyButton text={value} disabled={!value} />
+    <div
+      className={cn(
+        'flex flex-col justify-between rounded-3xl border border-slate-200/60 bg-white p-5 shadow-card transition-colors',
+        className,
+      )}
+    >
+      <div>
+        <div className="flex items-center justify-between gap-2 pb-3">
+          <label htmlFor={outputId} className="text-[14px] font-semibold tracking-tight text-ink">
+            {label}
+          </label>
+          <div className="flex items-center gap-1.5">
+            {actions}
+            <CopyButton text={value} disabled={!value} />
+            <DownloadButton content={value} filename={filename} mimeType={mimeType} disabled={!value} />
+          </div>
+        </div>
+
+        <div className="relative">
+          <textarea
+            id={outputId}
+            value={value}
+            readOnly
+            placeholder={placeholder}
+            aria-label={label}
+            spellCheck={false}
+            className={cn(
+              'w-full resize-y rounded-2xl border border-slate-200/80 bg-slate-50/60 p-4 font-mono text-[13px] leading-relaxed text-ink transition-all placeholder:text-slate-400',
+              minHeight,
+              'focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400',
+              !value && 'text-slate-400',
+            )}
+          />
         </div>
       </div>
 
-      <div className="relative">
-        <textarea
-          id={outputId}
-          value={value}
-          readOnly
-          placeholder={placeholder}
-          aria-label={label}
-          spellCheck={false}
-          className={cn(
-            'w-full resize-y rounded-2xl border border-slate-200/80 bg-slate-50/50 p-4 font-mono text-[13px] leading-relaxed text-ink transition-all placeholder:text-slate-500',
-            'min-h-[260px] md:min-h-[380px]',
-            'focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400',
-            !value && 'text-slate-400',
-          )}
-        />
-      </div>
+      {footer && <div className="mt-4 pt-3 border-t border-slate-100">{footer}</div>}
     </div>
   )
 }

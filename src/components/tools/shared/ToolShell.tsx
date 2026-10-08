@@ -1,36 +1,36 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, Sparkles } from 'lucide-react'
+import { ArrowUpRight, ChevronRight, Lock } from 'lucide-react'
 import { SiteHeader } from '../../layout/SiteHeader'
 import { SiteFooter } from '../../layout/SiteFooter'
 import { links } from '../../../lib/links'
-import { categories, type CategoryId } from '../../../data/tools'
-import { categoryIcons } from '../categoryIcons'
+import { categories, getToolsByCategory, getToolHref, type CategoryId } from '../../../data/tools'
+import { ToolIcon } from '../ToolIcon'
 import { cn } from '../../../lib/cn'
 
 interface ToolShellProps {
+  toolId: string
   title: string
   description: string
   categoryId?: CategoryId
   metaDescription?: string
-  actions?: ReactNode
   notice?: ReactNode
   children: ReactNode
   className?: string
 }
 
 export function ToolShell({
+  toolId,
   title,
   description,
   categoryId = 'developer',
   metaDescription,
-  actions,
   notice,
   children,
   className,
 }: ToolShellProps) {
   const category = categories.find((c) => c.id === categoryId)
-  const Icon = category ? categoryIcons[categoryId] : Sparkles
+  const relatedTools = getToolsByCategory(categoryId).filter((t) => t.id !== toolId)
 
   return (
     <div className="px-3 pt-3 sm:px-6 sm:pt-6">
@@ -42,57 +42,107 @@ export function ToolShell({
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-page px-2">
-        {/* Navigation / Breadcrumb */}
-        <div className="pt-6 sm:pt-10">
-          <Link
-            to={links.tools}
-            className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-500 transition-colors hover:text-ink"
-          >
-            <ArrowLeft className="size-3.5" aria-hidden="true" />
-            <span>Voltar para todas as ferramentas</span>
-          </Link>
-        </div>
+        {/* Breadcrumb Navigation */}
+        <nav aria-label="Breadcrumb" className="pt-4 sm:pt-6">
+          <ol className="flex flex-wrap items-center gap-1.5 text-[12px] text-slate-500">
+            <li>
+              <Link to={links.tools} className="hover:text-ink transition-colors">
+                Ferramentas
+              </Link>
+            </li>
+            <li>
+              <ChevronRight className="size-3 text-slate-400" aria-hidden="true" />
+            </li>
+            {category && (
+              <>
+                <li>
+                  <Link
+                    to={`${links.tools}?category=${category.id}`}
+                    className="hover:text-ink transition-colors"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+                <li>
+                  <ChevronRight className="size-3 text-slate-400" aria-hidden="true" />
+                </li>
+              </>
+            )}
+            <li className="font-semibold text-ink" aria-current="page">
+              {title}
+            </li>
+          </ol>
+        </nav>
 
-        {/* Hero Header */}
-        <div className="mt-4 flex flex-col gap-4 pb-6 md:flex-row md:items-end md:justify-between">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2.5">
-              <span className="flex size-9 items-center justify-center rounded-full border border-slate-200/70 bg-white text-ink shadow-sm">
-                <Icon className="size-4" aria-hidden="true" />
-              </span>
-              {category && (
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold tracking-wide text-slate-600 uppercase">
-                  {category.name}
-                </span>
-              )}
-            </div>
-            <h1 className="font-display text-[32px] font-medium leading-[1.1] tracking-tight text-ink md:text-[46px]">
+        {/* Hero Header with Tool Icon and Privacy Notice */}
+        <div className="mt-4 pb-6">
+          <div className="flex items-center gap-3">
+            <span className="flex size-10 items-center justify-center rounded-xl bg-slate-100 text-ink">
+              <ToolIcon toolId={toolId} className="size-5" />
+            </span>
+            <h1 className="font-display text-[28px] font-semibold tracking-tight text-ink sm:text-[36px]">
               {title}
             </h1>
-            <p className="max-w-2xl text-[15px] leading-relaxed text-muted">
-              {description}
-            </p>
           </div>
-
-          {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+          <p className="mt-2 text-[14px] leading-relaxed text-muted sm:text-[15px]">
+            {description}
+          </p>
+          <div className="mt-2 flex items-center gap-1.5 text-[12px] text-slate-500">
+            <Lock className="size-3.5 text-slate-400" aria-hidden="true" />
+            <span>Tudo é processado no seu navegador. O que você digita aqui não é enviado nem armazenado.</span>
+          </div>
         </div>
 
-        {/* Notice / Semantic disclaimer if provided */}
-        {notice && (
-          <div className="mb-6 rounded-2xl border border-sky-200/80 bg-sky-50/60 p-4 text-[13px] text-sky-950">
-            {notice}
-          </div>
-        )}
+        {/* Global Notice / Disclaimer banner if provided */}
+        {notice && <div className="mb-6">{notice}</div>}
 
         {/* Main Work Area */}
-        <div
-          className={cn(
-            'rounded-card border border-slate-200/60 bg-white p-5 shadow-card sm:p-7',
-            className,
-          )}
-        >
+        <div className={cn('w-full', className)}>
           {children}
         </div>
+
+        {/* More in Category Section */}
+        {relatedTools.length > 0 && category && (
+          <section className="mt-16 sm:mt-20 border-t border-slate-100 pt-10" aria-labelledby="related-tools-title">
+            <div className="flex items-center justify-between gap-4 mb-5">
+              <h2 id="related-tools-title" className="font-display text-[20px] font-medium tracking-tight text-ink">
+                Mais em {category.name}
+              </h2>
+              <Link
+                to={links.tools}
+                className="text-[12px] font-semibold text-slate-500 hover:text-ink transition-colors"
+              >
+                Ver todas as ferramentas
+              </Link>
+            </div>
+
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {relatedTools.map((tool) => (
+                <li key={tool.id}>
+                  <Link
+                    to={getToolHref(tool)}
+                    className="group relative flex items-start justify-between gap-3 rounded-2xl border border-slate-200/60 bg-white p-4 shadow-card hover:border-slate-300 transition-all"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-700 group-hover:text-ink">
+                        <ToolIcon toolId={tool.id} className="size-4" />
+                      </span>
+                      <div>
+                        <h3 className="text-[14px] font-semibold text-ink group-hover:text-navy">
+                          {tool.name}
+                        </h3>
+                        <p className="mt-0.5 text-[12px] text-muted line-clamp-2 leading-relaxed">
+                          {tool.description}
+                        </p>
+                      </div>
+                    </div>
+                    <ArrowUpRight className="size-4 shrink-0 text-slate-400 group-hover:text-ink transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </main>
 
       <SiteFooter />

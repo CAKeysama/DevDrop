@@ -6,6 +6,7 @@ import {
   CodeOutput,
   ErrorMessage,
   ExampleButton,
+  PasteButton,
   ToolShell,
 } from '../../components/tools/shared'
 import {
@@ -15,7 +16,6 @@ import {
   URL_RAW_EXAMPLE,
   type UrlEncodeType,
 } from '../../lib/codecs/url'
-import { surfacePill } from '../../components/ui/styles'
 import { cn } from '../../lib/cn'
 
 type Mode = 'encode' | 'decode'
@@ -90,114 +90,127 @@ export default function UrlEncoderPage() {
     processConversion(exampleVal, mode, encodeType)
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault()
+      processConversion(input, mode, encodeType)
+    }
+  }
+
   return (
     <ToolShell
-      title="URL Encode / Decode"
-      description="Codifique ou decodifique URLs, parâmetros de consulta (query strings) e caracteres especiais com segurança."
+      toolId="url-encoder"
+      title="URL Encode/Decode"
+      description="Codifica e decodifica textos para uso em URLs (percent-encoding)."
       categoryId="developer"
       metaDescription="Codifique e decodifique parâmetros de URLs online. Suporte a encodeURIComponent e encodeURI com tratamento completo de erros."
-      actions={
-        <>
-          <ExampleButton onLoadExample={handleLoadExample} />
-          <ClearButton onClear={handleClear} disabled={!input && !output} />
-        </>
-      }
     >
       <div className="flex flex-col gap-6">
-        {/* Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-5">
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2">
-              <span className="text-[13px] font-semibold text-slate-500">Operação:</span>
-              <div className="inline-flex rounded-full bg-slate-100 p-1">
-                <button
-                  type="button"
-                  onClick={() => handleModeChange('encode')}
-                  className={cn(
-                    'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-all',
-                    mode === 'encode'
-                      ? 'bg-navy text-white shadow-sm'
-                      : 'text-slate-600 hover:text-ink',
-                  )}
-                >
-                  Codificar (Encode)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleModeChange('decode')}
-                  className={cn(
-                    'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-all',
-                    mode === 'decode'
-                      ? 'bg-navy text-white shadow-sm'
-                      : 'text-slate-600 hover:text-ink',
-                  )}
-                >
-                  Decodificar (Decode)
-                </button>
-              </div>
-            </div>
-
-            {mode === 'encode' && (
-              <div className="inline-flex items-center gap-1.5 text-[12px]">
-                <label htmlFor="url-encode-type" className="font-medium text-slate-500 whitespace-nowrap">
-                  Tipo:
-                </label>
-                <select
-                  id="url-encode-type"
-                  value={encodeType}
-                  onChange={(e) => handleEncodeTypeChange(e.target.value as UrlEncodeType)}
-                  className={cn(
-                    surfacePill,
-                    'cursor-pointer px-3 py-1 text-[12px] font-medium text-ink focus:outline-none focus:ring-1 focus:ring-slate-400',
-                  )}
-                >
-                  <option value="component">Componente (Parâmetros / Query strings)</option>
-                  <option value="full">URL Completa (preserva :// e rotas)</option>
-                </select>
-              </div>
-            )}
-          </div>
-
-          <button
-            type="button"
-            onClick={() => handleModeChange(mode === 'encode' ? 'decode' : 'encode')}
-            className={cn(
-              surfacePill,
-              'inline-flex cursor-pointer items-center gap-1.5 px-3 py-1.5 text-[12px] font-semibold text-slate-700 hover:text-ink',
-            )}
-          >
-            <ArrowRightLeft className="size-3.5" aria-hidden="true" />
-            <span>Inverter modo</span>
-          </button>
-        </div>
-
         {/* Error message */}
         {error && <ErrorMessage title="Erro na conversão de URL" error={error} />}
 
-        {/* Workspace: 2 columns */}
+        {/* 2-Column Responsive Workspace */}
         <div className="grid gap-6 lg:grid-cols-2">
+          {/* Left Column: Input Card */}
           <CodeInput
             id="url-input"
-            label={mode === 'encode' ? 'Texto ou URL Original' : 'URL Codificada'}
+            label={mode === 'encode' ? 'Texto ou URL de entrada' : 'URL codificada de entrada'}
             value={input}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             placeholder={
               mode === 'encode'
                 ? 'Cole ou digite a URL/texto para codificar…'
                 : 'Cole a URL percent-encoded para decodificar (ex: https%3A%2F%2Fexemplo.com)…'
             }
             error={error}
+            actions={
+              <>
+                <ExampleButton onLoadExample={handleLoadExample} label="Exemplo" />
+                <PasteButton onPaste={(text) => handleInputChange(text)} />
+                <ClearButton onClear={handleClear} disabled={!input && !output} />
+              </>
+            }
+            footer={
+              <div className="flex flex-col gap-4">
+                <p className="text-[12px] text-slate-400">
+                  Atalho: <kbd className="font-sans font-medium text-slate-600">Ctrl + Enter</kbd> (
+                  <kbd className="font-sans font-medium text-slate-600">⌘ + Enter</kbd> no Mac) executa a ação principal.
+                </p>
+
+                {/* Mode Selector and Type */}
+                <div className="flex flex-wrap items-center gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <span className="text-[12px] font-medium text-slate-500">Operação</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleModeChange('encode')}
+                        className={cn(
+                          'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-all',
+                          mode === 'encode'
+                            ? 'bg-[#0a152d] text-white shadow-sm'
+                            : 'border border-slate-200/80 bg-white text-slate-600 hover:text-ink',
+                        )}
+                      >
+                        Codificar (Encode)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleModeChange('decode')}
+                        className={cn(
+                          'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-all',
+                          mode === 'decode'
+                            ? 'bg-[#0a152d] text-white shadow-sm'
+                            : 'border border-slate-200/80 bg-white text-slate-600 hover:text-ink',
+                        )}
+                      >
+                        Decodificar (Decode)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleModeChange(mode === 'encode' ? 'decode' : 'encode')}
+                        className="cursor-pointer inline-flex items-center gap-1 rounded-full border border-slate-200/80 bg-white px-3 py-1.5 text-[12px] font-semibold text-slate-600 hover:text-ink transition-all"
+                      >
+                        <ArrowRightLeft className="size-3" aria-hidden="true" />
+                        <span>Inverter</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {mode === 'encode' && (
+                    <div className="flex flex-col gap-1.5">
+                      <label htmlFor="url-encode-type" className="text-[12px] font-medium text-slate-500">
+                        Tipo de codificação
+                      </label>
+                      <select
+                        id="url-encode-type"
+                        value={encodeType}
+                        onChange={(e) => handleEncodeTypeChange(e.target.value as UrlEncodeType)}
+                        className="cursor-pointer rounded-full border border-slate-200/80 bg-white px-3.5 py-1.5 text-[12px] font-semibold text-ink focus:outline-none focus:ring-1 focus:ring-slate-400 shadow-sm"
+                      >
+                        <option value="component">Componente (Parâmetros / Query strings)</option>
+                        <option value="full">URL Completa (preserva :// e caminhos)</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+              </div>
+            }
           />
 
+          {/* Right Column: Output Card */}
           <CodeOutput
             id="url-output"
-            label={mode === 'encode' ? 'URL Codificada' : 'Texto ou URL Decodificada'}
+            label="Resultado"
             value={output}
             placeholder={
               mode === 'encode'
                 ? 'O resultado codificado aparecerá aqui…'
                 : 'O texto decodificado aparecerá aqui…'
             }
+            filename="devdrop-url.txt"
+            mimeType="text/plain"
           />
         </div>
       </div>
