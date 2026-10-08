@@ -1,0 +1,115 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------
+   DevDrop Design System — single source of truth for tokens.
+   Add tokens here; do not hard-code new values in components.
+   ------------------------------------------------------------------ */
+@theme {
+  /* Typography */
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque Variable', 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* Color */
+  --color-canvas: #f9fafb;
+  --color-ink: #0a1b33;
+  --color-navy: #0a152d;
+  --color-muted: #64748b;
+
+  /* Radius — maximum roundness */
+  --radius-card: 32px;
+  --radius-hero: 48px;
+
+  /* Elevation */
+  --shadow-hero: 0 40px 100px -20px rgba(0, 0, 0, 0.03);
+  --shadow-float: 0 12px 40px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 1px 2px rgba(10, 27, 51, 0.04), 0 16px 40px -24px rgba(10, 27, 51, 0.1);
+
+  /* Layout */
+  --container-page: 1400px;
+
+  /* Motion */
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: #fff;
+  }
+}
+
+@layer components {
+  /* Marquee — CSS-only movement, no JavaScript involved. */
+  .marquee {
+    overflow-x: auto;
+    scrollbar-width: none;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+
+  .marquee::-webkit-scrollbar {
+    display: none;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: var(--animate-marquee);
+    will-change: transform;
+  }
+
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+
+  /* Without movement the duplicate list is redundant; the row stays scrollable. */
+  .marquee-track > [aria-hidden='true'] {
+    display: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

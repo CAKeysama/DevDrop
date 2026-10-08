@@ -1,0 +1,55 @@
+import { createElement } from 'react'
+import {
+  Binary,
+  Blend,
+  Braces,
+  Building2,
+  CaseSensitive,
+  CodeXml,
+  Database,
+  Equal,
+  Fingerprint,
+  Hash,
+  IdCard,
+  KeyRound,
+  Layers,
+  LetterText,
+  Link2,
+  LockKeyhole,
+  Percent,
+  Pilcrow,
+  ShieldCheck,
+  SquareDashed,
+  WholeWord,
+  Wrench,
+  type LucideIcon,
+} from 'lucide-react'
+
+const icons: Record<string, LucideIcon> = {
+  'json-formatter': Braces,
+  'xml-formatter': CodeXml,
+  'sql-formatter': Database,
+  base64: Binary,
+  'url-encoder': Link2,
+  'jwt-decoder': KeyRound,
+  'password-generator': LockKeyhole,
+  'password-strength': ShieldCheck,
+  'character-counter': LetterText,
+  'word-counter': WholeWord,
+  'case-converter': CaseSensitive,
+  percentage: Percent,
+  'rule-of-three': Equal,
+  uuid: Fingerprint,
+  'lorem-ipsum': Pilcrow,
+  'hash-generator': Hash,
+  cpf: IdCard,
+  cnpj: Building2,
+  'css-shadow': Layers,
+  'css-gradient': Blend,
+  'css-border': SquareDashed,
+}
+
+/** Icon of a tool, by id. Falls back to a generic icon for tools without a specific one. */
+export function ToolIcon({ toolId, className }: { toolId: string; className?: string }) {
+  return createElement(icons[toolId] ?? Wrench, { 'aria-hidden': true, className })
+}
