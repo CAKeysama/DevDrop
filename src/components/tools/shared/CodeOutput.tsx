@@ -62,7 +62,7 @@ export function CodeOutput({
             aria-label={label}
             spellCheck={false}
             className={cn(
-              'w-full resize-y rounded-2xl border border-line-strong bg-slate-50/60 p-4 leading-relaxed text-ink transition-all placeholder:text-subtle',
+              'w-full resize-y rounded-2xl border border-line-strong bg-slate-50/60 p-4 leading-relaxed text-ink transition-[background-color,border-color] duration-150 ease-out placeholder:text-subtle',
               prose ? 'font-sans text-[15px]' : 'font-mono text-[13px]',
               minHeight,
               'focus:bg-white',

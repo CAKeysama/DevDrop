@@ -144,9 +144,9 @@ export default function UrlEncoderPage() {
                         type="button"
                         onClick={() => handleModeChange('encode')}
                         className={cn(
-                          'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-all',
+                          'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-[color,background-color,border-color,box-shadow,scale] duration-150 ease-out active:scale-[0.97]',
                           mode === 'encode'
-                            ? 'bg-[#0a152d] text-white shadow-sm'
+                            ? 'bg-navy text-white shadow-sm'
                             : 'border border-slate-200/80 bg-white text-slate-600 hover:text-ink',
                         )}
                       >
@@ -156,9 +156,9 @@ export default function UrlEncoderPage() {
                         type="button"
                         onClick={() => handleModeChange('decode')}
                         className={cn(
-                          'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-all',
+                          'cursor-pointer rounded-full px-4 py-1.5 text-[12px] font-semibold transition-[color,background-color,border-color,box-shadow,scale] duration-150 ease-out active:scale-[0.97]',
                           mode === 'decode'
-                            ? 'bg-[#0a152d] text-white shadow-sm'
+                            ? 'bg-navy text-white shadow-sm'
                             : 'border border-slate-200/80 bg-white text-slate-600 hover:text-ink',
                         )}
                       >
@@ -167,7 +167,7 @@ export default function UrlEncoderPage() {
                       <button
                         type="button"
                         onClick={() => handleModeChange(mode === 'encode' ? 'decode' : 'encode')}
-                        className="cursor-pointer inline-flex items-center gap-1 rounded-full border border-slate-200/80 bg-white px-3 py-1.5 text-[12px] font-semibold text-slate-600 hover:text-ink transition-all"
+                        className="cursor-pointer inline-flex items-center gap-1 rounded-full border border-slate-200/80 bg-white px-3 py-1.5 text-[12px] font-semibold text-slate-600 hover:text-ink transition-[color,background-color,border-color,scale] duration-150 ease-out active:scale-[0.97]"
                       >
                         <ArrowRightLeft className="size-3" aria-hidden="true" />
                         <span>Inverter</span>

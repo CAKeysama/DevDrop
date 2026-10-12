@@ -12,8 +12,8 @@ type Size = 'sm' | 'md'
 const base = 'inline-flex items-center justify-center gap-1.5 font-semibold whitespace-nowrap'
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-[#0a152d] text-white rounded-full',
-  surface: cn(surfacePill, 'text-[#0a1b33]'),
+  primary: 'bg-navy text-white rounded-full',
+  surface: cn(surfacePill, 'text-ink'),
 }
 
 const sizes: Record<Size, string> = {

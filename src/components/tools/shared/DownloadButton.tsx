@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Check, Download } from 'lucide-react'
 import { cn } from '../../../lib/cn'
-import { surfacePill } from '../../ui/styles'
+import { pressable, surfacePill } from '../../ui/styles'
 
 interface DownloadButtonProps {
   content: string
@@ -51,7 +51,8 @@ export function DownloadButton({
       aria-label={label}
       className={cn(
         surfacePill,
-        'inline-flex cursor-pointer items-center justify-center gap-1.5 px-3 py-1 text-[12px] font-semibold text-slate-700 hover:text-ink transition-all disabled:opacity-40 disabled:cursor-not-allowed',
+        pressable,
+        'inline-flex cursor-pointer items-center justify-center gap-1.5 px-3 py-1 text-[12px] font-semibold text-slate-700 hover:text-ink disabled:opacity-40 disabled:cursor-not-allowed',
         downloaded && 'border-emerald-200 bg-emerald-50/80 text-emerald-700',
         className,
       )}

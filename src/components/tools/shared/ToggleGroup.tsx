@@ -42,7 +42,7 @@ export function ToggleGroup<T extends string | number>({
               disabled={disabled}
               onClick={() => onChange(option.value)}
               className={cn(
-                'cursor-pointer rounded-full border px-3.5 py-1.5 text-[12px] font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-50',
+                'cursor-pointer rounded-full border px-3.5 py-1.5 text-[12px] font-semibold transition-[color,background-color,border-color,box-shadow,scale] duration-150 ease-out enabled:active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50',
                 pressed
                   ? 'border-navy bg-navy text-white shadow-sm'
                   : 'border-line-strong bg-white text-slate-700 hover:border-ink hover:text-ink',

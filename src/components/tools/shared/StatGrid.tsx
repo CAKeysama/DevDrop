@@ -17,7 +17,7 @@ export function StatGrid({ stats, className }: { stats: Stat[]; className?: stri
           key={stat.label}
           className={cn(
             'flex flex-col-reverse justify-end gap-1 rounded-2xl border p-4',
-            stat.primary ? 'border-[#0a152d] bg-[#0a152d] text-white' : 'border-slate-200/80 bg-slate-50/60 text-ink',
+            stat.primary ? 'border-navy bg-navy text-white' : 'border-slate-200/80 bg-slate-50/60 text-ink',
           )}
         >
           <dt className={cn('text-[12px] font-medium', stat.primary ? 'text-white/70' : 'text-slate-500')}>{stat.label}</dt>

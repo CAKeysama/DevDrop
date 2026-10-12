@@ -34,7 +34,9 @@ export function HeroVideo() {
         preload="metadata"
         tabIndex={-1}
         onError={() => setFailed(true)}
-        className="w-full h-full object-cover scale-105 transition-transform duration-1000"
+        // The footage is light; in dark mode invert it and turn the hue back, so the white
+        // tiles go dark while the blue stays blue.
+        className="w-full h-full object-cover scale-105 dark:invert dark:hue-rotate-180"
       />
     </div>
   )

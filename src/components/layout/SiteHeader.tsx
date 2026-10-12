@@ -3,6 +3,7 @@ import { ChevronRight } from 'lucide-react'
 import { links } from '../../lib/links'
 import { ButtonLink } from '../ui/Button'
 import { LogoMark } from '../ui/LogoMark'
+import { ThemeToggle } from '../ui/ThemeToggle'
 
 /** Top bar for inner pages. The landing page uses the floating navbar inside the hero instead. */
 export function SiteHeader() {
@@ -27,6 +28,7 @@ export function SiteHeader() {
         >
           Docs<span className="sr-only"> (abre em nova aba)</span>
         </a>
+        <ThemeToggle />
         <ButtonLink href={links.repo} variant="surface" size="sm" className="max-sm:px-3.5">
           GitHub
           <ChevronRight aria-hidden="true" className="size-3.5" />

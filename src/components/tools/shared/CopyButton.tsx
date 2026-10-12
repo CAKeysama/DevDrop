@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Check, Copy } from 'lucide-react'
 import { cn } from '../../../lib/cn'
-import { surfacePill } from '../../ui/styles'
+import { controlTransition, pressable, surfacePill } from '../../ui/styles'
 
 interface CopyButtonProps {
   text: string
@@ -52,7 +52,11 @@ export function CopyButton({
   }
 
   const baseStyle =
-    'inline-flex items-center justify-center gap-1.5 font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer'
+    cn(
+      'inline-flex items-center justify-center gap-1.5 font-semibold disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer',
+      controlTransition,
+      pressable,
+    )
 
   const sizeStyle =
     size === 'sm' ? 'px-3 py-1.5 text-[12px] rounded-full' : 'px-5 py-2 text-[14px] rounded-full'

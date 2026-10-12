@@ -38,6 +38,16 @@ export function SiteFooter() {
                 Sugerir ferramenta{newTab}
               </a>
             </li>
+            <li>
+              <Link to={links.privacy} className={linkClass}>
+                Privacidade
+              </Link>
+            </li>
+            <li>
+              <Link to={links.cookies} className={linkClass}>
+                Cookies
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>

@@ -1,12 +1,15 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { MotionConfig } from 'motion/react'
+import { PageTransition } from './components/layout/PageTransition'
 import { ScrollManager } from './components/layout/ScrollManager'
 import LandingPage from './pages/LandingPage'
 
 // Secondary routes are split out so the landing page ships the minimum JavaScript.
 const ToolsPage = lazy(() => import('./pages/ToolsPage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'))
+const CookiesPage = lazy(() => import('./pages/CookiesPage'))
 const JsonFormatterPage = lazy(() => import('./pages/tools/JsonFormatterPage'))
 const XmlFormatterPage = lazy(() => import('./pages/tools/XmlFormatterPage'))
 const SqlFormatterPage = lazy(() => import('./pages/tools/SqlFormatterPage'))
@@ -35,32 +38,36 @@ export default function App() {
       <BrowserRouter>
         <ScrollManager />
         <Suspense fallback={null}>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/tools" element={<ToolsPage />} />
-            <Route path="/tools/json-formatter" element={<JsonFormatterPage />} />
-            <Route path="/tools/xml-formatter" element={<XmlFormatterPage />} />
-            <Route path="/tools/sql-formatter" element={<SqlFormatterPage />} />
-            <Route path="/tools/base64" element={<Base64Page />} />
-            <Route path="/tools/url-encoder" element={<UrlEncoderPage />} />
-            <Route path="/tools/jwt-decoder" element={<JwtDecoderPage />} />
-            <Route path="/tools/password-generator" element={<PasswordGeneratorPage />} />
-            <Route path="/tools/password-strength" element={<PasswordStrengthPage />} />
-            <Route path="/tools/character-counter" element={<CharacterCounterPage />} />
-            <Route path="/tools/word-counter" element={<WordCounterPage />} />
-            <Route path="/tools/case-converter" element={<CaseConverterPage />} />
-            <Route path="/tools/percentage" element={<PercentagePage />} />
-            <Route path="/tools/rule-of-three" element={<RuleOfThreePage />} />
-            <Route path="/tools/uuid" element={<UuidGeneratorPage />} />
-            <Route path="/tools/lorem-ipsum" element={<LoremIpsumPage />} />
-            <Route path="/tools/hash-generator" element={<HashGeneratorPage />} />
-            <Route path="/tools/cpf" element={<CpfPage />} />
-            <Route path="/tools/cnpj" element={<CnpjPage />} />
-            <Route path="/tools/css-shadow" element={<CssShadowPage />} />
-            <Route path="/tools/css-gradient" element={<CssGradientPage />} />
-            <Route path="/tools/css-border" element={<CssBorderPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+          <PageTransition>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/tools" element={<ToolsPage />} />
+              <Route path="/tools/json-formatter" element={<JsonFormatterPage />} />
+              <Route path="/tools/xml-formatter" element={<XmlFormatterPage />} />
+              <Route path="/tools/sql-formatter" element={<SqlFormatterPage />} />
+              <Route path="/tools/base64" element={<Base64Page />} />
+              <Route path="/tools/url-encoder" element={<UrlEncoderPage />} />
+              <Route path="/tools/jwt-decoder" element={<JwtDecoderPage />} />
+              <Route path="/tools/password-generator" element={<PasswordGeneratorPage />} />
+              <Route path="/tools/password-strength" element={<PasswordStrengthPage />} />
+              <Route path="/tools/character-counter" element={<CharacterCounterPage />} />
+              <Route path="/tools/word-counter" element={<WordCounterPage />} />
+              <Route path="/tools/case-converter" element={<CaseConverterPage />} />
+              <Route path="/tools/percentage" element={<PercentagePage />} />
+              <Route path="/tools/rule-of-three" element={<RuleOfThreePage />} />
+              <Route path="/tools/uuid" element={<UuidGeneratorPage />} />
+              <Route path="/tools/lorem-ipsum" element={<LoremIpsumPage />} />
+              <Route path="/tools/hash-generator" element={<HashGeneratorPage />} />
+              <Route path="/tools/cpf" element={<CpfPage />} />
+              <Route path="/tools/cnpj" element={<CnpjPage />} />
+              <Route path="/tools/css-shadow" element={<CssShadowPage />} />
+              <Route path="/tools/css-gradient" element={<CssGradientPage />} />
+              <Route path="/tools/css-border" element={<CssBorderPage />} />
+              <Route path="/privacidade" element={<PrivacyPage />} />
+              <Route path="/cookies" element={<CookiesPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </PageTransition>
         </Suspense>
       </BrowserRouter>
     </MotionConfig>

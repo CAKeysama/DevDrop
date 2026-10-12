@@ -1,6 +1,6 @@
 import { Trash2 } from 'lucide-react'
 import { cn } from '../../../lib/cn'
-import { surfacePill } from '../../ui/styles'
+import { pressable, surfacePill } from '../../ui/styles'
 
 interface ClearButtonProps {
   onClear: () => void
@@ -28,7 +28,8 @@ export function ClearButton({
       aria-label={label}
       className={cn(
         surfacePill,
-        'inline-flex items-center justify-center gap-1.5 font-semibold text-slate-600 hover:text-rose-600 hover:border-rose-200 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer',
+        pressable,
+        'inline-flex items-center justify-center gap-1.5 font-semibold text-slate-600 hover:text-rose-600 hover:border-rose-200 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer',
         sizeStyle,
         className,
       )}

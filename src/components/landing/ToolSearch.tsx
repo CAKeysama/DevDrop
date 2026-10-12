@@ -28,7 +28,7 @@ export function ToolSearch() {
       <button
         type="submit"
         aria-label="Buscar"
-        className="absolute right-2 top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-navy text-white transition-transform hover:scale-105 active:scale-95"
+        className="absolute right-2 top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-navy text-white transition-[scale] duration-150 ease-out hover:scale-105 active:scale-[0.97]"
       >
         <ArrowRight aria-hidden="true" className="size-4" />
       </button>

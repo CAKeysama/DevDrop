@@ -17,6 +17,23 @@
       content="Formate JSON, XML e SQL, codifique Base64 e URL e decodifique JWT direto no navegador, sem enviar seus dados. Grátis, sem cadastro."
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Theme before first paint, so a dark-mode visit never flashes white. Same key and
+         class as src/lib/theme.ts. -->
+    <script>
+      (function () {
+        var theme
+        try {
+          theme = localStorage.getItem('devdrop-theme')
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        }
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark')
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0b1120')
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

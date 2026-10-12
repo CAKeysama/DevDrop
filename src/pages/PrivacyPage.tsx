@@ -1,0 +1,175 @@
+import { Link } from 'react-router-dom'
+import { LegalPage, type LegalSection } from '../components/layout/LegalPage'
+import { links } from '../lib/links'
+
+/*
+ * Keep this page true to the code. It states what DevDrop does today: no accounts, no
+ * cookies, no analytics, tools that run in the browser, one localStorage key for the theme
+ * (lib/theme.ts), a hero video served by a third-party CDN (HeroVideo.tsx) and self-hosted
+ * fonts. Adding analytics, a backend, a form or any new third party means updating this
+ * page (and /cookies) in the same change.
+ */
+
+const external = { target: '_blank', rel: 'noreferrer' } as const
+
+const sections: LegalSection[] = [
+  {
+    id: 'quem-somos',
+    title: 'Quem é o responsável',
+    content: (
+      <p>
+        O DevDrop é um projeto mantido por <strong>CAKeysama</strong>, que é o responsável (controlador) pelo
+        tratamento de dados descrito aqui, nos termos da Lei Geral de Proteção de Dados (LGPD, Lei nº 13.709/2018).
+      </p>
+    ),
+  },
+  {
+    id: 'o-que-nao-coletamos',
+    title: 'O que não coletamos',
+    content: (
+      <>
+        <p>O DevDrop não tem cadastro, login nem formulários. Por isso, não coletamos:</p>
+        <ul>
+          <li>nome, e-mail, telefone ou qualquer dado de cadastro;</li>
+          <li>
+            o conteúdo que você usa nas ferramentas: JSON, XML, SQL, textos, senhas, tokens JWT, CPF, CNPJ, cores ou
+            qualquer outro valor;
+          </li>
+          <li>histórico de uso, cliques ou páginas visitadas (não usamos analytics);</li>
+          <li>dados para publicidade (não exibimos anúncios nem usamos rastreadores).</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    id: 'processamento-local',
+    title: 'As ferramentas rodam no seu navegador',
+    content: (
+      <>
+        <p>
+          Formatar, validar, codificar, gerar e calcular acontece inteiramente no seu dispositivo, com o JavaScript da
+          própria página. O que você digita ou cola não é enviado a nenhum servidor, nem ao nosso, e não é armazenado:
+          some quando você fecha ou recarrega a página.
+        </p>
+        <p>
+          Os botões <strong>Colar</strong> e <strong>Copiar</strong> usam a área de transferência do seu sistema apenas
+          quando você clica neles, e o navegador pode pedir sua permissão antes. Nada é lido da área de transferência sem
+          esse clique.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 'armazenamento-local',
+    title: 'O que fica guardado no seu navegador',
+    content: (
+      <p>
+        Uma única informação: o tema que você escolheu (claro ou escuro), salvo no <code>localStorage</code> do seu
+        navegador, e só se você usar o botão de tema. Ela nunca é enviada a nós. Os detalhes, e um botão para apagá-la,
+        estão na <Link to={links.cookies}>Política de Cookies</Link>.
+      </p>
+    ),
+  },
+  {
+    id: 'dados-tecnicos',
+    title: 'Dados técnicos de acesso',
+    content: (
+      <>
+        <p>
+          Como em qualquer site, para entregar as páginas o seu navegador informa dados técnicos ao servidor: endereço IP,
+          data e hora, a página pedida e o tipo de navegador e de sistema. O serviço que hospeda o DevDrop pode registrar
+          esses dados em logs de servidor, usados para manter o site no ar e protegê-lo contra abusos. Não usamos esses
+          registros para identificar você, montar perfis ou fazer publicidade.
+        </p>
+        <p>
+          O vídeo de fundo da página inicial é servido pela rede de distribuição de conteúdo da Amazon (Amazon
+          CloudFront), que recebe esses mesmos dados técnicos ao entregar o arquivo. Ela não grava cookies. As fontes do
+          site são servidas pelo próprio DevDrop, sem Google Fonts.
+        </p>
+        <p>
+          A base legal para esses registros técnicos é o legítimo interesse em operar e proteger o site (art. 7º, IX, da
+          LGPD).
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 'links-externos',
+    title: 'Links para outros sites',
+    content: (
+      <p>
+        Alguns links levam ao GitHub (repositório, documentação, sugestões de ferramentas). Ao segui-los, você passa a
+        estar sujeito às políticas de privacidade e de cookies do GitHub, não às do DevDrop.
+      </p>
+    ),
+  },
+  {
+    id: 'compartilhamento',
+    title: 'Compartilhamento',
+    content: (
+      <p>
+        Não vendemos, alugamos nem compartilhamos dados pessoais. Os únicos terceiros envolvidos são os que entregam o
+        site e o vídeo (hospedagem e CDN), e apenas com os dados técnicos descritos acima.
+      </p>
+    ),
+  },
+  {
+    id: 'seus-direitos',
+    title: 'Seus direitos',
+    content: (
+      <>
+        <p>Pela LGPD, você pode, a qualquer momento:</p>
+        <ul>
+          <li>confirmar se tratamos dados seus e ter acesso a eles;</li>
+          <li>pedir a correção de dados incompletos, inexatos ou desatualizados;</li>
+          <li>pedir a anonimização, o bloqueio ou a eliminação de dados desnecessários ou tratados em excesso;</li>
+          <li>pedir a portabilidade dos dados;</li>
+          <li>saber com quem seus dados foram compartilhados;</li>
+          <li>apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).</li>
+        </ul>
+        <p>
+          Como não temos cadastro nem guardamos o que você usa nas ferramentas, na prática quase não há dados seus conosco.
+          Ainda assim, para qualquer pedido ou dúvida, fale com a gente{' '}
+          <a href={links.privacyContact} {...external}>
+            abrindo uma issue no GitHub
+          </a>
+          . Não inclua dados pessoais na mensagem, porque issues são públicas: diga o que precisa e combinamos um canal
+          privado para responder.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 'alteracoes',
+    title: 'Alterações nesta política',
+    content: (
+      <p>
+        Se o DevDrop passar a tratar dados de outra forma (por exemplo, adicionando estatísticas de uso), esta página será
+        atualizada antes da mudança entrar no ar, com a nova data no topo. Quando a lei exigir, pediremos o seu
+        consentimento antes.
+      </p>
+    ),
+  },
+]
+
+export default function PrivacyPage() {
+  return (
+    <LegalPage
+      title="Política de Privacidade"
+      description="Como o DevDrop trata dados: sem cadastro, sem cookies, sem analytics, e ferramentas que rodam no seu navegador."
+      updated="11 de outubro de 2026"
+      summary={
+        <ul>
+          <li>Não há cadastro, login, anúncios nem analytics.</li>
+          <li>
+            O que você usa nas ferramentas é processado <strong>no seu navegador</strong> e não é enviado nem guardado por
+            nós.
+          </li>
+          <li>Não usamos cookies. Só guardamos, no seu navegador, o tema que você escolher.</li>
+          <li>O servidor e a CDN do vídeo recebem dados técnicos de acesso (como o IP), como em qualquer site.</li>
+        </ul>
+      }
+      sections={sections}
+    />
+  )
+}

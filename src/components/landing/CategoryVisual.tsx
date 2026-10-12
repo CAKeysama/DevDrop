@@ -64,8 +64,10 @@ export function CategoryVisual({ id }: { id: CategoryId }) {
       return (
         <div aria-hidden="true" className="flex items-center gap-3">
           <span className="size-14 rounded-2xl bg-linear-to-br from-sky-300 to-indigo-500" />
-          <span className="size-14 rounded-2xl bg-white shadow-[0_14px_30px_-8px_rgba(10,27,51,0.3)] ring-1 ring-slate-100" />
-          <span className="size-14 rounded-2xl border-2 border-dashed border-slate-300" />
+          {/* In dark mode a shadow alone doesn't show on the dark card: the tile lifts to a
+              lighter fill and casts a black shadow, so it still reads as elevated. */}
+          <span className="size-14 rounded-2xl bg-white shadow-[0_14px_30px_-8px_rgba(10,27,51,0.3)] ring-1 ring-slate-100 dark:bg-slate-200 dark:shadow-[0_14px_30px_-6px_rgba(0,0,0,0.75)] dark:ring-slate-300" />
+          <span className="size-14 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-400" />
         </div>
       )
   }

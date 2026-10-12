@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { SiteFooter } from '../components/layout/SiteFooter'
 import { SiteHeader } from '../components/layout/SiteHeader'
@@ -7,6 +8,7 @@ import { categoryIcons } from '../components/tools/categoryIcons'
 import { SearchField } from '../components/ui/SearchField'
 import { categories, formatToolCount, getAvailableTools, isCategoryId, searchTools, type CategoryId, type Tool } from '../data/tools'
 import { links } from '../lib/links'
+import { easeOut, listItem, listItemTransition, staggerDelay } from '../lib/motion'
 
 function buildHref(category: CategoryId | null, query: string) {
   const params = new URLSearchParams()
@@ -26,12 +28,7 @@ function ToolCard({ tool }: { tool: Tool }) {
         to={tool.path}
         className="block h-full rounded-3xl border border-slate-200/60 bg-white p-5 shadow-card transition-colors hover:border-slate-300"
       >
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="font-display text-[18px] font-medium tracking-tight text-ink">{tool.name}</h3>
-          <span className="shrink-0 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-800 ring-1 ring-emerald-200">
-            Disponível
-          </span>
-        </div>
+        <h3 className="font-display text-[18px] font-medium tracking-tight text-ink">{tool.name}</h3>
         <p className="mt-2 text-[14px] leading-relaxed text-muted">{tool.description}</p>
       </Link>
     )
@@ -66,6 +63,8 @@ export default function ToolsPage() {
         .sort((a, b) => results.indexOf(a.tools[0]) - results.indexOf(b.tools[0])),
     [results],
   )
+  /** Position of each tool in the results, so cards cascade in reading order across groups. */
+  const order = useMemo(() => new Map(results.map((tool, index) => [tool.id, index])), [results])
 
   function handleQueryChange(value: string) {
     const next = new URLSearchParams(params)
@@ -109,77 +108,116 @@ export default function ToolsPage() {
           {query && <> para “{query}”</>}
         </p>
 
-        {groups.length === 0 ? (
-          <div className="mt-4 rounded-card border border-slate-200/60 bg-white p-8 text-center shadow-card sm:p-12">
-            <p className="font-display text-[22px] font-medium tracking-tight text-ink">Nenhuma ferramenta encontrada</p>
-            <p className="mt-2 text-[14px] text-muted">
-              Tente buscar pelo formato ({suggestedQueries.map((q, i) => (
-                <span key={q}>
-                  {i > 0 && ', '}
-                  <Link to={buildHref(null, q)} className="font-semibold text-ink underline underline-offset-2">
-                    {q}
-                  </Link>
-                </span>
-              ))}) ou abra uma das ferramentas disponíveis:
-            </p>
-            <ul className="mt-5 flex flex-wrap justify-center gap-2">
-              {getAvailableTools().map((tool) => (
-                <li key={tool.id}>
-                  <Link
-                    to={tool.path!}
-                    className="inline-flex rounded-full border border-slate-300 bg-white px-3.5 py-2 text-[13px] font-semibold text-ink hover:border-ink"
-                  >
-                    {tool.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Link
-                to={links.tools}
-                className="inline-flex rounded-full bg-navy px-6 py-3 text-[14px] font-semibold text-white"
+        {/* popLayout: what leaves is taken out of the flow at once, so the rest slides into
+            place while it fades instead of waiting for it. */}
+        <div className="relative">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {groups.length === 0 ? (
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, transition: { duration: 0.15, ease: easeOut } }}
+                transition={{ duration: 0.2, ease: easeOut }}
+                className="mt-4 rounded-card border border-slate-200/60 bg-white p-8 text-center shadow-card sm:p-12"
               >
-                Limpar filtros
-              </Link>
-              <a
-                href={links.suggest}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex rounded-full border border-slate-300 bg-white px-6 py-3 text-[14px] font-semibold text-ink"
-              >
-                Sugerir esta ferramenta<span className="sr-only"> (abre em nova aba)</span>
-              </a>
-            </div>
-          </div>
-        ) : (
-          <div className="mt-4 space-y-12">
-            {groups.map(({ category: group, tools: groupTools }) => {
-              const Icon = categoryIcons[group.id]
-              return (
-                <section key={group.id} aria-labelledby={`category-${group.id}`}>
-                  <div className="flex items-center gap-3">
-                    <span className="flex size-10 items-center justify-center rounded-full border border-slate-200/70 bg-white text-ink">
-                      <Icon aria-hidden="true" className="size-[18px]" />
+                <p className="font-display text-[22px] font-medium tracking-tight text-ink">Nenhuma ferramenta encontrada</p>
+                <p className="mt-2 text-[14px] text-muted">
+                  Tente buscar pelo formato ({suggestedQueries.map((q, i) => (
+                    <span key={q}>
+                      {i > 0 && ', '}
+                      <Link to={buildHref(null, q)} className="font-semibold text-ink underline underline-offset-2">
+                        {q}
+                      </Link>
                     </span>
-                    <div>
-                      <h2 id={`category-${group.id}`} className="font-display text-[22px] font-medium tracking-tight text-ink">
-                        {group.name}
-                      </h2>
-                    </div>
-                  </div>
-                  <p className="mt-2 text-[14px] text-muted">{group.description}</p>
-                  <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {groupTools.map((tool) => (
-                      <li key={tool.id}>
-                        <ToolCard tool={tool} />
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              )
-            })}
-          </div>
-        )}
+                  ))}) ou abra uma das ferramentas disponíveis:
+                </p>
+                <ul className="mt-5 flex flex-wrap justify-center gap-2">
+                  {getAvailableTools().map((tool) => (
+                    <li key={tool.id}>
+                      <Link
+                        to={tool.path!}
+                        className="inline-flex rounded-full border border-slate-300 bg-white px-3.5 py-2 text-[13px] font-semibold text-ink hover:border-ink"
+                      >
+                        {tool.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-6 flex flex-wrap justify-center gap-3">
+                  <Link
+                    to={links.tools}
+                    className="inline-flex rounded-full bg-navy px-6 py-3 text-[14px] font-semibold text-white"
+                  >
+                    Limpar filtros
+                  </Link>
+                  <a
+                    href={links.suggest}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex rounded-full border border-slate-300 bg-white px-6 py-3 text-[14px] font-semibold text-ink"
+                  >
+                    Sugerir esta ferramenta<span className="sr-only"> (abre em nova aba)</span>
+                  </a>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="results"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.15, ease: easeOut } }}
+                transition={{ duration: 0.2, ease: easeOut }}
+                className="relative mt-4 space-y-12"
+              >
+                <AnimatePresence mode="popLayout" initial={false}>
+                  {groups.map(({ category: group, tools: groupTools }) => {
+                    const Icon = categoryIcons[group.id]
+                    return (
+                      // layout="position": groups change height as cards come and go; animating
+                      // their size would stretch the cards inside.
+                      <motion.section
+                        key={group.id}
+                        layout="position"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0, transition: { duration: 0.15, ease: easeOut } }}
+                        transition={listItemTransition}
+                        aria-labelledby={`category-${group.id}`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="flex size-10 items-center justify-center rounded-full border border-slate-200/70 bg-white text-ink">
+                            <Icon aria-hidden="true" className="size-[18px]" />
+                          </span>
+                          <div>
+                            <h2 id={`category-${group.id}`} className="font-display text-[22px] font-medium tracking-tight text-ink">
+                              {group.name}
+                            </h2>
+                          </div>
+                        </div>
+                        <p className="mt-2 text-[14px] text-muted">{group.description}</p>
+                        <ul className="relative mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                          <AnimatePresence mode="popLayout">
+                            {groupTools.map((tool) => (
+                              <motion.li
+                                key={tool.id}
+                                layout="position"
+                                {...listItem}
+                                transition={{ ...listItemTransition, delay: staggerDelay(order.get(tool.id) ?? 0) }}
+                              >
+                                <ToolCard tool={tool} />
+                              </motion.li>
+                            ))}
+                          </AnimatePresence>
+                        </ul>
+                      </motion.section>
+                    )
+                  })}
+                </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </main>
 
       <SiteFooter />

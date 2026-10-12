@@ -29,7 +29,7 @@ export function ErrorMessage({
       role="status"
       aria-live="polite"
       className={cn(
-        'flex items-start gap-3 rounded-2xl border border-rose-200/90 bg-rose-50/70 p-4 text-[13px] text-rose-900 transition-all',
+        'flex items-start gap-3 rounded-2xl border border-rose-200/90 bg-rose-50/70 p-4 text-[13px] text-rose-900',
         className,
       )}
     >

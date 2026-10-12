@@ -1,13 +1,13 @@
 import type { ReactNode } from 'react'
 import { cn } from '../../../lib/cn'
-import { surfacePill } from '../../ui/styles'
+import { pressable, surfacePill } from '../../ui/styles'
 
 /** Stage where a CSS generator shows its live preview. */
 export function PreviewStage({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <div
       className={cn(
-        'flex min-h-64 flex-1 items-center justify-center overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/60 bg-[radial-gradient(circle,#e2e8f0_1px,transparent_1px)] bg-[length:16px_16px] p-8 sm:min-h-72',
+        'flex min-h-64 flex-1 items-center justify-center overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-50/60 bg-[radial-gradient(circle,var(--color-slate-200)_1px,transparent_1px)] bg-[length:16px_16px] p-8 sm:min-h-72',
         className,
       )}
     >
@@ -27,7 +27,7 @@ export function Presets<T>({ presets, onSelect }: { presets: Array<{ name: strin
             key={preset.name}
             type="button"
             onClick={() => onSelect(preset.value)}
-            className={cn(surfacePill, 'cursor-pointer px-3 py-1.5 text-[12px] font-semibold text-slate-700 hover:text-ink')}
+            className={cn(surfacePill, pressable, 'cursor-pointer px-3 py-1.5 text-[12px] font-semibold text-slate-700 hover:text-ink')}
           >
             {preset.name}
           </button>

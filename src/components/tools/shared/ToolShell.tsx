@@ -137,7 +137,7 @@ export function ToolShell({
                   ) : (
                   <Link
                     to={getToolHref(tool)}
-                    className="group relative flex items-start justify-between gap-3 rounded-2xl border border-slate-200/60 bg-white p-4 shadow-card hover:border-slate-300 transition-all"
+                    className="group relative flex items-start justify-between gap-3 rounded-2xl border border-slate-200/60 bg-white p-4 shadow-card hover:border-slate-300 transition-colors"
                   >
                     <div className="flex items-start gap-3">
                       <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-700 group-hover:text-ink">

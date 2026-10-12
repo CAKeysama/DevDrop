@@ -104,7 +104,7 @@ export function RangeField({ label, value, onChange, min, max, step = 1, unit, c
         max={max}
         step={step}
         onChange={(event) => onChange(clamp(Number(event.target.value)))}
-        className="h-6 w-full cursor-pointer accent-[#0a152d]"
+        className="h-6 w-full cursor-pointer accent-navy"
       />
     </div>
   )
@@ -125,7 +125,7 @@ export function Checkbox({ label, checked, onChange, hint, className }: Checkbox
         type="checkbox"
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
-        className="mt-0.5 size-4 shrink-0 cursor-pointer rounded accent-[#0a152d]"
+        className="mt-0.5 size-4 shrink-0 cursor-pointer rounded accent-navy"
       />
       <span>
         <span className="font-medium">{label}</span>

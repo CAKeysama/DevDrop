@@ -28,7 +28,7 @@ export function ToolCategoryCard({ category, featured = false, wide = false, cla
       className={cn(
         'group relative flex flex-col gap-6 rounded-card border p-6 shadow-card transition-colors sm:p-8',
         featured
-          ? 'border-navy bg-navy text-white'
+          ? 'palette-light border-navy bg-navy text-white'
           : 'border-slate-200/60 bg-white text-ink hover:border-slate-300',
         wide && 'lg:flex-row lg:items-center lg:gap-12',
         className,

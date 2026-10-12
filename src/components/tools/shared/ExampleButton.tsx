@@ -1,6 +1,6 @@
 import { Sparkles } from 'lucide-react'
 import { cn } from '../../../lib/cn'
-import { surfacePill } from '../../ui/styles'
+import { pressable, surfacePill } from '../../ui/styles'
 
 interface ExampleButtonProps {
   onLoadExample: () => void
@@ -28,7 +28,8 @@ export function ExampleButton({
       aria-label={label}
       className={cn(
         surfacePill,
-        'inline-flex items-center justify-center gap-1.5 font-semibold text-slate-700 hover:text-ink hover:border-slate-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer',
+        pressable,
+        'inline-flex items-center justify-center gap-1.5 font-semibold text-slate-700 hover:text-ink hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer',
         sizeStyle,
         className,
       )}

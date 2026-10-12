@@ -31,16 +31,16 @@ function MarqueeCard({ tool, duplicate }: { tool: Tool; duplicate: boolean }) {
         <span
           aria-hidden="true"
           style={{ backgroundImage: gradients[tool.categoryId] }}
-          className="absolute inset-0 scale-[1.5] opacity-0 transition-all duration-500 ease-out group-hover:scale-100 group-hover:opacity-100"
+          className="absolute inset-0 scale-[1.5] opacity-0 transition-[opacity,scale] duration-300 ease-out group-hover:scale-100 group-hover:opacity-100"
         />
-        <span className="relative flex size-12 shrink-0 items-center justify-center rounded-full border border-slate-200/70 bg-canvas text-ink transition-colors duration-500 group-hover:border-white/30 group-hover:bg-white/15 group-hover:text-white">
-          <ToolIcon toolId={tool.id} className="size-5 transition-transform duration-500 group-hover:scale-110" />
+        <span className="relative flex size-12 shrink-0 items-center justify-center rounded-full border border-slate-200/70 bg-canvas text-ink transition-colors duration-300 group-hover:border-snow/30 group-hover:bg-snow/15 group-hover:text-snow">
+          <ToolIcon toolId={tool.id} className="size-5 transition-transform duration-300 group-hover:scale-110" />
         </span>
         <span className="relative flex flex-col whitespace-nowrap">
-          <span className="text-[14px] font-semibold text-ink transition-colors duration-500 group-hover:text-white">
+          <span className="text-[14px] font-semibold text-ink transition-colors duration-300 group-hover:text-snow">
             {tool.name}
           </span>
-          <span className="text-[12px] font-medium text-subtle transition-colors duration-500 group-hover:text-white/75">
+          <span className="text-[12px] font-medium text-subtle transition-colors duration-300 group-hover:text-snow/75">
             {category.name}
           </span>
         </span>
