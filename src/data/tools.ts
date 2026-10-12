@@ -187,6 +187,15 @@ export const tools: Tool[] = [
     keywords: ['quebra', 'quebras', 'linha', 'linhas', 'enter', 'newline', 'juntar', 'unir', 'trocar', 'paragrafo', 'line break', 'texto corrido'],
   },
   {
+    id: 'sort-lines',
+    name: 'Ordem alfabética',
+    description: 'Coloca as linhas de um texto em ordem alfabética (A→Z ou Z→A), com opção de tirar as repetidas.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/sort-lines',
+    keywords: ['ordenar', 'ordem', 'alfabetica', 'alfabetico', 'sort', 'classificar', 'organizar', 'lista', 'a-z', 'duplicadas', 'repetidas', 'azul'],
+  },
+  {
     id: 'text-splitter',
     name: 'Dividir texto',
     description: 'Divide um texto por vírgula, espaço, tab ou outro separador, uma parte por linha.',

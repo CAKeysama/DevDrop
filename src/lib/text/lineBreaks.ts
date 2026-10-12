@@ -25,7 +25,7 @@ export interface LineBreakResult {
 }
 
 /** Windows (\r\n), old Mac (\r), Unix (\n) and the Unicode line/paragraph separators. */
-const LINE_BREAK = /\r\n|[\n\r\u2028\u2029]/
+export const LINE_BREAK =/\r\n|[\n\r\u2028\u2029]/
 
 export function replaceLineBreaks(text: string, { mode, custom, skipEmpty, trimLines }: LineBreakOptions): LineBreakResult {
   const lines = text.split(LINE_BREAK)

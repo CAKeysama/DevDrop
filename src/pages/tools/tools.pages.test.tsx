@@ -23,6 +23,7 @@ import PercentagePage from './PercentagePage'
 import RuleOfThreePage from './RuleOfThreePage'
 import UuidGeneratorPage from './UuidGeneratorPage'
 import RemoveAccentsPage from './RemoveAccentsPage'
+import SortLinesPage from './SortLinesPage'
 import TextReverserPage from './TextReverserPage'
 import TextSplitterPage from './TextSplitterPage'
 import WordCounterPage from './WordCounterPage'
@@ -64,6 +65,7 @@ const pages: Array<[string, ComponentType]> = [
   ['Remover acentos', RemoveAccentsPage],
   ['Remover quebras de linha', LineBreaksPage],
   ['Dividir texto', TextSplitterPage],
+  ['Ordem alfabética', SortLinesPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -228,6 +230,22 @@ describe('text splitter', () => {
 
     await user.type(field('Separador'), 'b')
     expect(area('text-splitter-output').value).toBe('a,\n,, c') // spaces around each part are trimmed
+  })
+})
+
+describe('sort lines', () => {
+  it('sorts in Portuguese order, descending, and removes repeated lines', async () => {
+    const user = open(SortLinesPage)
+    await user.click(area('sort-lines-input'))
+    await user.paste('z\nç\nc\nitem 10\nitem 2\nc')
+    expect(area('sort-lines-output').value).toBe('c\nc\nç\nitem 2\nitem 10\nz')
+
+    await user.click(screen.getByRole('checkbox', { name: /Remover linhas repetidas/ }))
+    expect(area('sort-lines-output').value).toBe('c\nç\nitem 2\nitem 10\nz')
+    expect(document.body.textContent).toMatch(/1 repetida removida/)
+
+    await user.click(screen.getByRole('radio', { name: 'Z → A' }))
+    expect(area('sort-lines-output').value).toBe('z\nitem 10\nitem 2\nç\nc')
   })
 })
 

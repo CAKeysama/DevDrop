@@ -1,5 +1,6 @@
 import { createElement } from 'react'
 import {
+  ArrowDownAZ,
   Binary,
   Blend,
   Braces,
@@ -45,6 +46,7 @@ const icons: Record<string, LucideIcon> = {
   'remove-accents': Eraser,
   'line-breaks': WrapText,
   'text-splitter': Split,
+  'sort-lines': ArrowDownAZ,
   percentage: Percent,
   'rule-of-three': Equal,
   uuid: Fingerprint,

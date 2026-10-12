@@ -37,6 +37,7 @@ const TextReverserPage = lazy(() => import('./pages/tools/TextReverserPage'))
 const RemoveAccentsPage = lazy(() => import('./pages/tools/RemoveAccentsPage'))
 const LineBreaksPage = lazy(() => import('./pages/tools/LineBreaksPage'))
 const TextSplitterPage = lazy(() => import('./pages/tools/TextSplitterPage'))
+const SortLinesPage = lazy(() => import('./pages/tools/SortLinesPage'))
 
 export default function App() {
   return (
@@ -75,6 +76,7 @@ export default function App() {
                 <Route path="/tools/remove-accents" element={<RemoveAccentsPage />} />
                 <Route path="/tools/line-breaks" element={<LineBreaksPage />} />
                 <Route path="/tools/text-splitter" element={<TextSplitterPage />} />
+                <Route path="/tools/sort-lines" element={<SortLinesPage />} />
                 <Route path="/privacidade" element={<PrivacyPage />} />
                 <Route path="/cookies" element={<CookiesPage />} />
                 <Route path="*" element={<NotFoundPage />} />
