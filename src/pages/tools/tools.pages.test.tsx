@@ -24,6 +24,7 @@ import RuleOfThreePage from './RuleOfThreePage'
 import UuidGeneratorPage from './UuidGeneratorPage'
 import RemoveAccentsPage from './RemoveAccentsPage'
 import SortLinesPage from './SortLinesPage'
+import TextCutterPage from './TextCutterPage'
 import TextReverserPage from './TextReverserPage'
 import TextSplitterPage from './TextSplitterPage'
 import WordCounterPage from './WordCounterPage'
@@ -66,6 +67,7 @@ const pages: Array<[string, ComponentType]> = [
   ['Remover quebras de linha', LineBreaksPage],
   ['Dividir texto', TextSplitterPage],
   ['Ordem alfabética', SortLinesPage],
+  ['Cortar texto', TextCutterPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -246,6 +248,30 @@ describe('sort lines', () => {
 
     await user.click(screen.getByRole('radio', { name: 'Z → A' }))
     expect(area('sort-lines-output').value).toBe('z\nitem 10\nitem 2\nç\nc')
+  })
+})
+
+describe('text cutter', () => {
+  it('keeps the first characters, then a range of words, and refuses a bad number', async () => {
+    const user = open(TextCutterPage)
+    await user.click(area('text-cutter-input'))
+    await user.paste('um dois três quatro cinco')
+    await user.clear(field(/Quantos caracteres/))
+    await user.type(field(/Quantos caracteres/), '6')
+    expect(area('text-cutter-output').value).toBe('um doi')
+    expect(document.body.textContent).toMatch(/6 de 25 caracteres mantidos/)
+
+    await user.click(screen.getByRole('radio', { name: 'Palavras' }))
+    await user.click(screen.getByRole('radio', { name: 'Do início ao fim' }))
+    await user.clear(field('Do número'))
+    await user.type(field('Do número'), '2')
+    await user.clear(field('Ao número'))
+    await user.type(field('Ao número'), '3')
+    expect(area('text-cutter-output').value).toBe('dois três')
+
+    await user.clear(field('Ao número'))
+    await user.type(field('Ao número'), 'x')
+    expect(errorText()).toMatch(/número inteiro maior que zero/)
   })
 })
 

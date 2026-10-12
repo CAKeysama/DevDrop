@@ -196,6 +196,15 @@ export const tools: Tool[] = [
     keywords: ['ordenar', 'ordem', 'alfabetica', 'alfabetico', 'sort', 'classificar', 'organizar', 'lista', 'a-z', 'duplicadas', 'repetidas', 'azul'],
   },
   {
+    id: 'text-cutter',
+    name: 'Cortar texto',
+    description: 'Mantém só uma parte do texto: os primeiros ou últimos caracteres ou palavras, ou um trecho do início ao fim.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/text-cutter',
+    keywords: ['cortar', 'recortar', 'trecho', 'substring', 'truncar', 'limitar', 'primeiros', 'ultimos', 'caracteres', 'palavras', 'encurtar', 'resumir'],
+  },
+  {
     id: 'text-splitter',
     name: 'Dividir texto',
     description: 'Divide um texto por vírgula, espaço, tab ou outro separador, uma parte por linha.',
