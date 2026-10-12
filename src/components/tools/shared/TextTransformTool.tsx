@@ -11,6 +11,8 @@ export interface TransformResult {
   output: string
   /** Shown under the input when the options cannot be applied (an invalid pattern, say). */
   error?: string
+  /** Heading of that message. */
+  errorTitle?: string
   /** One line under the result: a count, what changed. Announced politely. */
   summary?: ReactNode
 }
@@ -65,7 +67,7 @@ export function TextTransformTool({
           prose
           placeholder={placeholder}
           error={result.error}
-          errorTitle="Opção inválida"
+          errorTitle={result.errorTitle ?? 'Opção inválida'}
           actions={
             <>
               <ExampleButton onLoadExample={() => setInput(example)} label="Exemplo" />

@@ -232,6 +232,15 @@ export const tools: Tool[] = [
     keywords: ['unicode', 'codigo', 'utf-8', 'utf8', 'utf-16', 'ascii', 'caractere', 'codepoint', 'entidade', 'simbolo', 'hexadecimal', 'decimal', 'emoji', 'invisivel', 'bytes'],
   },
   {
+    id: 'number-to-words',
+    name: 'Número por extenso',
+    description: 'Escreve números e valores em reais por extenso: 1250 vira "mil duzentos e cinquenta".',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/number-to-words',
+    keywords: ['extenso', 'numero por extenso', 'escrever numero', 'valor por extenso', 'cheque', 'reais', 'ordinal', 'cardinal', 'por extenso', 'dinheiro', 'recibo', 'contrato', 'moeda'],
+  },
+  {
     id: 'text-splitter',
     name: 'Dividir texto',
     description: 'Divide um texto por vírgula, espaço, tab ou outro separador, uma parte por linha.',

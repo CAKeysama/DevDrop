@@ -18,6 +18,7 @@ import CssShadowPage from './CssShadowPage'
 import HashGeneratorPage from './HashGeneratorPage'
 import LoremIpsumPage from './LoremIpsumPage'
 import LineBreaksPage from './LineBreaksPage'
+import NumberToWordsPage from './NumberToWordsPage'
 import PasswordGeneratorPage from './PasswordGeneratorPage'
 import PasswordStrengthPage from './PasswordStrengthPage'
 import PercentagePage from './PercentagePage'
@@ -74,6 +75,7 @@ const pages: Array<[string, ComponentType]> = [
   ['Texto para HTML', TextToHtmlPage],
   ['Contador de ocorrências', WordOccurrencesPage],
   ['Informações de caractere', CharInfoPage],
+  ['Número por extenso', NumberToWordsPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -333,6 +335,25 @@ describe('character info', () => {
 
     await user.click(button('Limpar'))
     await waitFor(() => expect(screen.queryAllByRole('row')).toHaveLength(0))
+  })
+})
+
+describe('number to words', () => {
+  it('writes numbers, money and ordinals, line by line, and flags an invalid line', async () => {
+    const user = open(NumberToWordsPage)
+    await user.click(area('number-to-words-input'))
+    await user.paste('1250\n2.000.000')
+    expect(area('number-to-words-output').value).toBe('mil duzentos e cinquenta\ndois milhões')
+
+    await user.click(screen.getByRole('radio', { name: 'Valor em dinheiro' }))
+    expect(area('number-to-words-output').value).toBe('mil duzentos e cinquenta reais\ndois milhões de reais')
+
+    await user.click(screen.getByRole('radio', { name: 'Ordinal' }))
+    await user.click(screen.getByRole('radio', { name: /Feminino/ }))
+    await user.clear(area('number-to-words-input'))
+    await user.paste('1\nabc')
+    expect(area('number-to-words-output').value).toBe('primeira\n(número inválido)')
+    expect(errorText()).toMatch(/Linha 2/)
   })
 })
 
