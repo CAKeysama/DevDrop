@@ -89,7 +89,9 @@ O site é hospedado na Vercel ([devdrop-tools.vercel.app](https://devdrop-tools.
 Ideias de ferramentas chegam como issues pelo formulário
 [Sugerir uma ferramenta](https://github.com/CAKeysama/DevDrop/issues/new?template=sugestao-de-ferramenta.yml),
 com a etiqueta `sugestão de ferramenta`. Pedidos sobre dados usam o formulário de privacidade.
-O site não usa cookies nem analytics; detalhes em `/privacidade` e `/cookies`.
+O site não usa cookies. As visitas são contadas pelo Vercel Web Analytics, que é anônimo e sem cookies, só no deploy
+de produção e sem o texto digitado na busca (`src/components/layout/SiteAnalytics.tsx`). Detalhes em `/privacidade` e
+`/cookies`.
 
 ## 📄 Licença
 

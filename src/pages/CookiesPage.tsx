@@ -85,8 +85,12 @@ const sections: LegalSection[] = [
       <>
         <p>
           <strong>Nenhum.</strong> O DevDrop não grava cookies: nem próprios, nem de terceiros, nem de análise, nem de
-          publicidade. Fontes, imagens e o vídeo da página inicial vêm do
-          próprio site.
+          publicidade. Fontes, imagens e o vídeo da página inicial vêm do próprio site.
+        </p>
+        <p>
+          As estatísticas de visitas (Vercel Web Analytics) também funcionam sem cookies e sem guardar nada no seu
+          navegador. Como elas contam visitas de forma anônima, estão descritas na{' '}
+          <Link to={`${links.privacy}#estatisticas`}>Política de Privacidade</Link>.
         </p>
       </>
     ),
@@ -107,7 +111,7 @@ const sections: LegalSection[] = [
     content: (
       <p>
         Avisos de consentimento existem para cookies que não são necessários ao site, como os de análise e de publicidade.
-        O DevDrop não usa nenhum. O único item guardado é uma preferência que você mesmo cria ao clicar no botão de tema,
+        O DevDrop não usa nenhum: até as estatísticas de visitas funcionam sem cookies. O único item guardado é uma preferência que você mesmo cria ao clicar no botão de tema,
         que fica só no seu dispositivo e que você pode apagar acima a qualquer momento.
       </p>
     ),
@@ -154,7 +158,7 @@ export default function CookiesPage() {
     <LegalPage
       title="Política de Cookies"
       description="O DevDrop não usa cookies. Saiba o que fica guardado no seu navegador e como apagar."
-      updated="11 de outubro de 2026"
+      updated="12 de outubro de 2026"
       summary={
         <ul>
           <li>

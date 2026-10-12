@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { MotionConfig } from 'motion/react'
 import { AppErrorBoundary } from './components/layout/AppErrorBoundary'
 import { PageTransition } from './components/layout/PageTransition'
+import { SiteAnalytics } from './components/layout/SiteAnalytics'
 import { ScrollManager } from './components/layout/ScrollManager'
 import LandingPage from './pages/LandingPage'
 
@@ -38,6 +39,7 @@ export default function App() {
     <MotionConfig reducedMotion="user">
       <BrowserRouter>
         <ScrollManager />
+        <SiteAnalytics />
         <Suspense fallback={null}>
           <PageTransition>
             <AppErrorBoundary>

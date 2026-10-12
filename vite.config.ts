@@ -61,5 +61,9 @@ function productionHeaders(): Record<string, string> {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), seo()],
+  define: {
+    // Analytics only in the production deploy (VERCEL_ENV is a Vercel system variable).
+    __ANALYTICS__: JSON.stringify(process.env.VERCEL_ENV === 'production'),
+  },
   preview: { headers: productionHeaders() },
 })

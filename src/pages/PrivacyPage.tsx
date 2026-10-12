@@ -4,10 +4,11 @@ import { links } from '../lib/links'
 
 /*
  * Keep this page true to the code. It states what DevDrop does today: no accounts, no
- * cookies, no analytics, tools that run in the browser, one localStorage key for the theme
- * (lib/theme.ts), hosting on Vercel, and every asset (fonts, hero video) served by the site
- * itself. Adding analytics, a backend, a form or any new third party means updating this
- * page (and /cookies) in the same change.
+ * cookies, tools that run in the browser, one localStorage key for the theme (lib/theme.ts),
+ * hosting on Vercel, anonymous Vercel Web Analytics with the search text removed
+ * (components/layout/SiteAnalytics.tsx), and every asset (fonts, hero video) served by the
+ * site itself. A backend, a form, custom analytics events or any new third party means
+ * updating this page (and /cookies) in the same change.
  */
 
 const external = { target: '_blank', rel: 'noreferrer' } as const
@@ -35,7 +36,13 @@ const sections: LegalSection[] = [
             o conteúdo que você usa nas ferramentas: JSON, XML, SQL, textos, senhas, tokens JWT, CPF, CNPJ, cores ou
             qualquer outro valor;
           </li>
-          <li>histórico de uso, cliques ou páginas visitadas (não usamos analytics);</li>
+          <li>
+            o que você digita na busca de ferramentas: o texto é removido do endereço antes de qualquer estatística;
+          </li>
+          <li>
+            um histórico que identifique você: as estatísticas de visitas são anônimas (veja{' '}
+            <a href="#estatisticas">Estatísticas de visitas</a>);
+          </li>
           <li>dados para publicidade (não exibimos anúncios nem usamos rastreadores).</li>
         </ul>
       </>
@@ -97,6 +104,40 @@ const sections: LegalSection[] = [
     ),
   },
   {
+    id: 'estatisticas',
+    title: 'Estatísticas de visitas',
+    content: (
+      <>
+        <p>
+          Para saber quais páginas e ferramentas são mais usadas, o DevDrop usa o{' '}
+          <a href="https://vercel.com/docs/analytics/privacy-policy" {...external}>
+            Vercel Web Analytics
+          </a>
+          . Ele conta visitas de forma anônima e agregada:
+        </p>
+        <ul>
+          <li>
+            <strong>não usa cookies</strong> nem guarda nada no seu navegador;
+          </li>
+          <li>
+            para contar visitantes únicos, usa um código (hash) calculado a partir da requisição, que é descartado em 24
+            horas, e não guarda seu IP junto com as visitas;
+          </li>
+          <li>
+            registra a página visitada, de qual site você veio, país e cidade aproximados, sistema, navegador e tipo de
+            dispositivo;
+          </li>
+          <li>não segue você em outros sites nem reconstrói o caminho que você fez.</li>
+        </ul>
+        <p>
+          Antes de cada registro, o DevDrop remove do endereço o texto da busca de ferramentas, para que o que você digita
+          nunca chegue às estatísticas. A base legal é o legítimo interesse em entender o uso do site e melhorá-lo (art.
+          7º, IX, da LGPD).
+        </p>
+      </>
+    ),
+  },
+  {
     id: 'links-externos',
     title: 'Links para outros sites',
     content: (
@@ -112,7 +153,7 @@ const sections: LegalSection[] = [
     content: (
       <p>
         Não vendemos, alugamos nem compartilhamos dados pessoais. O único terceiro envolvido é a Vercel, que hospeda e
-        entrega o site, e apenas com os dados técnicos descritos acima.
+        entrega o site e calcula as estatísticas anônimas de visitas, apenas com os dados descritos acima.
       </p>
     ),
   },
@@ -147,7 +188,8 @@ const sections: LegalSection[] = [
     title: 'Alterações nesta política',
     content: (
       <p>
-        Se o DevDrop passar a tratar dados de outra forma (por exemplo, adicionando estatísticas de uso), esta página será
+        Se o DevDrop passar a tratar dados de outra forma (por exemplo, coletando algo além das estatísticas anônimas
+        descritas acima), esta página será
         atualizada antes da mudança entrar no ar, com a nova data no topo. Quando a lei exigir, pediremos o seu
         consentimento antes.
       </p>
@@ -159,16 +201,20 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Política de Privacidade"
-      description="Como o DevDrop trata dados: sem cadastro, sem cookies, sem analytics, e ferramentas que rodam no seu navegador."
-      updated="11 de outubro de 2026"
+      description="Como o DevDrop trata dados: sem cadastro, sem cookies, estatísticas anônimas e ferramentas que rodam no seu navegador."
+      updated="12 de outubro de 2026"
       summary={
         <ul>
-          <li>Não há cadastro, login, anúncios nem analytics.</li>
+          <li>Não há cadastro, login nem anúncios.</li>
           <li>
             O que você usa nas ferramentas é processado <strong>no seu navegador</strong> e não é enviado nem guardado por
             nós.
           </li>
           <li>Não usamos cookies. Só guardamos, no seu navegador, o tema que você escolher.</li>
+          <li>
+            Contamos visitas de forma <strong>anônima e sem cookies</strong> (Vercel Web Analytics), sem o que você digita
+            na busca.
+          </li>
           <li>A hospedagem (Vercel) recebe dados técnicos de acesso, como o IP, como em qualquer site.</li>
         </ul>
       }
