@@ -186,6 +186,15 @@ export const tools: Tool[] = [
     path: '/tools/line-breaks',
     keywords: ['quebra', 'quebras', 'linha', 'linhas', 'enter', 'newline', 'juntar', 'unir', 'trocar', 'paragrafo', 'line break', 'texto corrido'],
   },
+  {
+    id: 'text-splitter',
+    name: 'Dividir texto',
+    description: 'Divide um texto por vírgula, espaço, tab ou outro separador, uma parte por linha.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/text-splitter',
+    keywords: ['dividir', 'split', 'separar', 'separador', 'string', 'virgula', 'csv', 'lista', 'partes', 'quebrar texto'],
+  },
 
   {
     id: 'percentage',

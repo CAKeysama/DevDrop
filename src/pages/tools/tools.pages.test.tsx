@@ -24,6 +24,7 @@ import RuleOfThreePage from './RuleOfThreePage'
 import UuidGeneratorPage from './UuidGeneratorPage'
 import RemoveAccentsPage from './RemoveAccentsPage'
 import TextReverserPage from './TextReverserPage'
+import TextSplitterPage from './TextSplitterPage'
 import WordCounterPage from './WordCounterPage'
 
 afterEach(cleanup)
@@ -62,6 +63,7 @@ const pages: Array<[string, ComponentType]> = [
   ['Inverter texto', TextReverserPage],
   ['Remover acentos', RemoveAccentsPage],
   ['Remover quebras de linha', LineBreaksPage],
+  ['Dividir texto', TextSplitterPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -209,6 +211,23 @@ describe('line breaks', () => {
     await user.click(screen.getByRole('radio', { name: 'Remover' }))
     expect(area('line-breaks-output').value).toBe('umdoistrês')
     expect(document.body.textContent).toMatch(/3 quebras de linha removidas/)
+  })
+})
+
+describe('text splitter', () => {
+  it('splits by comma, then by a custom separator, and asks for it when empty', async () => {
+    const user = open(TextSplitterPage)
+    await user.click(area('text-splitter-input'))
+    await user.paste('a, b,, c')
+    expect(area('text-splitter-output').value).toBe('a\nb\nc')
+    expect(document.body.textContent).toMatch(/3 partes, uma por linha/)
+
+    await user.click(screen.getByRole('radio', { name: 'Outro…' }))
+    expect(document.body.textContent).toMatch(/Digite o separador/)
+    expect(area('text-splitter-output').value).toBe('')
+
+    await user.type(field('Separador'), 'b')
+    expect(area('text-splitter-output').value).toBe('a,\n,, c') // spaces around each part are trimmed
   })
 })
 
