@@ -18,7 +18,7 @@ export function IndentSelect({
 }: IndentSelectProps) {
   return (
     <div className={cn('inline-flex items-center gap-1.5 text-[12px]', className)}>
-      <label htmlFor={id} className="font-medium text-slate-500 whitespace-nowrap">
+      <label htmlFor={id} className="font-medium text-muted whitespace-nowrap">
         Indentação:
       </label>
       <select
@@ -31,7 +31,7 @@ export function IndentSelect({
         }}
         className={cn(
           surfacePill,
-          'cursor-pointer px-3 py-1 text-[12px] font-medium text-ink focus:outline-none focus:ring-1 focus:ring-slate-400',
+          'cursor-pointer border-line-strong px-3 py-1 text-[12px] font-medium text-ink',
         )}
       >
         <option value={2}>2 espaços</option>

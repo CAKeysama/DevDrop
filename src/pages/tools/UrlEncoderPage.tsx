@@ -4,7 +4,6 @@ import {
   ClearButton,
   CodeInput,
   CodeOutput,
-  ErrorMessage,
   ExampleButton,
   PasteButton,
   ToolShell,
@@ -106,9 +105,6 @@ export default function UrlEncoderPage() {
       metaDescription="Codifique e decodifique parâmetros de URLs online. Suporte a encodeURIComponent e encodeURI com tratamento completo de erros."
     >
       <div className="flex flex-col gap-6">
-        {/* Error message */}
-        {error && <ErrorMessage title="Erro na conversão de URL" error={error} />}
-
         {/* 2-Column Responsive Workspace */}
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column: Input Card */}
@@ -124,6 +120,7 @@ export default function UrlEncoderPage() {
                 : 'Cole a URL percent-encoded para decodificar (ex: https%3A%2F%2Fexemplo.com)…'
             }
             error={error}
+            errorTitle="Não foi possível converter"
             actions={
               <>
                 <ExampleButton onLoadExample={handleLoadExample} label="Exemplo" />
@@ -133,7 +130,7 @@ export default function UrlEncoderPage() {
             }
             footer={
               <div className="flex flex-col gap-4">
-                <p className="text-[12px] text-slate-400">
+                <p className="text-[12px] text-subtle">
                   Atalho: <kbd className="font-sans font-medium text-slate-600">Ctrl + Enter</kbd> (
                   <kbd className="font-sans font-medium text-slate-600">⌘ + Enter</kbd> no Mac) executa a ação principal.
                 </p>
@@ -141,7 +138,7 @@ export default function UrlEncoderPage() {
                 {/* Mode Selector and Type */}
                 <div className="flex flex-wrap items-center gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <span className="text-[12px] font-medium text-slate-500">Operação</span>
+                    <span className="text-[12px] font-medium text-muted">Operação</span>
                     <div className="flex flex-wrap items-center gap-2">
                       <button
                         type="button"
@@ -180,14 +177,14 @@ export default function UrlEncoderPage() {
 
                   {mode === 'encode' && (
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor="url-encode-type" className="text-[12px] font-medium text-slate-500">
+                      <label htmlFor="url-encode-type" className="text-[12px] font-medium text-muted">
                         Tipo de codificação
                       </label>
                       <select
                         id="url-encode-type"
                         value={encodeType}
                         onChange={(e) => handleEncodeTypeChange(e.target.value as UrlEncodeType)}
-                        className="cursor-pointer rounded-full border border-slate-200/80 bg-white px-3.5 py-1.5 text-[12px] font-semibold text-ink focus:outline-none focus:ring-1 focus:ring-slate-400 shadow-sm"
+                        className="cursor-pointer rounded-full border border-line-strong bg-white px-3.5 py-1.5 text-[12px] font-semibold text-ink shadow-sm"
                       >
                         <option value="component">Componente (Parâmetros / Query strings)</option>
                         <option value="full">URL Completa (preserva :// e caminhos)</option>

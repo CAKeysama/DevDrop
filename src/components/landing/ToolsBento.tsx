@@ -1,4 +1,4 @@
-import { categories, tools, type CategoryId } from '../../data/tools'
+import { categories, formatToolCount, type CategoryId } from '../../data/tools'
 import { CategoryPills } from '../tools/CategoryPills'
 import { ToolCategoryCard } from './ToolCategoryCard'
 import { ToolSearch } from './ToolSearch'
@@ -18,14 +18,14 @@ export function ToolsBento() {
     <section id="tools" aria-labelledby="tools-heading" className="mx-auto mt-16 w-full max-w-page scroll-mt-6 md:mt-24">
       <div className="grid gap-8 px-2 lg:grid-cols-2 lg:items-end lg:gap-16">
         <div>
-          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-slate-400">Caixa de ferramentas</p>
+          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">Caixa de ferramentas</p>
           <h2 id="tools-heading" className="mt-3 font-display text-[32px] font-medium leading-[1.1] tracking-tight text-ink md:text-[44px]">
             Um só lugar para os utilitários
             <br className="hidden sm:block" /> que você usa todo dia
           </h2>
           <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-muted">
-            Busque pelo nome ou escolha uma categoria. São {tools.length} ferramentas em {categories.length}{' '}
-            categorias, e todas funcionam direto no navegador.
+            Busque pelo nome ou escolha uma categoria: {formatToolCount()} em {categories.length} categorias, e todas
+            funcionam direto no navegador.
           </p>
         </div>
         <div className="flex flex-col gap-4">

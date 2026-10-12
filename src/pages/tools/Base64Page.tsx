@@ -4,7 +4,6 @@ import {
   ClearButton,
   CodeInput,
   CodeOutput,
-  ErrorMessage,
   ExampleButton,
   PasteButton,
   ToolShell,
@@ -97,9 +96,6 @@ export default function Base64Page() {
       metaDescription="Codifique e decodifique Base64 online com suporte total a Unicode e UTF-8. Rápido, seguro e 100% executado no cliente."
     >
       <div className="flex flex-col gap-6">
-        {/* Error message */}
-        {error && <ErrorMessage title="Erro na conversão Base64" error={error} />}
-
         {/* 2-Column Responsive Workspace */}
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column: Input Card */}
@@ -115,6 +111,7 @@ export default function Base64Page() {
                 : 'Cole o código Base64 para decodificar (ex: SGVsbG8gV29ybGQ=)…'
             }
             error={error}
+            errorTitle="Não foi possível converter"
             actions={
               <>
                 <ExampleButton onLoadExample={handleLoadExample} label="Exemplo" />
@@ -124,14 +121,14 @@ export default function Base64Page() {
             }
             footer={
               <div className="flex flex-col gap-4">
-                <p className="text-[12px] text-slate-400">
+                <p className="text-[12px] text-subtle">
                   Atalho: <kbd className="font-sans font-medium text-slate-600">Ctrl + Enter</kbd> (
                   <kbd className="font-sans font-medium text-slate-600">⌘ + Enter</kbd> no Mac) executa a ação principal.
                 </p>
 
                 {/* Mode Selector */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[12px] font-medium text-slate-500">Operação</span>
+                  <span className="text-[12px] font-medium text-muted">Operação</span>
                   <div className="flex flex-wrap items-center gap-2">
                     <button
                       type="button"

@@ -39,6 +39,13 @@ function open(Page: ComponentType) {
   return user
 }
 
+/** Text of the tool's error banners (ErrorMessage), which announce politely as a status. */
+const errorText = () =>
+  screen
+    .getAllByRole('status')
+    .map((element) => element.textContent)
+    .join(' ')
+
 const button = (name: string | RegExp) => screen.getByRole('button', { name })
 const field = (name: string | RegExp) => screen.getByRole('textbox', { name }) as HTMLInputElement
 const area = (id: string) => document.getElementById(id) as HTMLTextAreaElement
@@ -92,7 +99,7 @@ describe('password tools', () => {
     expect(read()).toMatch(/^\d{20}$/)
 
     await user.click(screen.getByRole('checkbox', { name: /Números/ }))
-    expect(screen.getByRole('alert').textContent).toMatch(/Nenhum tipo de caractere/)
+    expect(errorText()).toMatch(/Nenhum tipo de caractere/)
 
     await user.click(button('Restaurar'))
     expect(read()).toHaveLength(20)
@@ -122,7 +129,7 @@ describe('text tools', () => {
     await user.paste('Olá 🚀')
     await waitFor(() => expect(within(screen.getByText('Caracteres').parentElement!).getByText('5')).toBeTruthy())
     await user.type(field(/Limite de caracteres/), '3')
-    await waitFor(() => expect(screen.getByRole('alert').textContent).toMatch(/2 caracteres além de 3/))
+    await waitFor(() => expect(errorText()).toMatch(/2 caracteres além de 3/))
     await user.click(button('Limpar'))
     expect(area('character-counter-input').value).toBe('')
   })
@@ -169,7 +176,7 @@ describe('calculators', () => {
     await user.click(screen.getByRole('radio', { name: 'X é quantos % de Y' }))
     await user.type(field('Parte (X)'), '5')
     await user.type(field('Total (Y)'), '0')
-    expect(screen.getByRole('alert').textContent).toMatch(/não pode ser zero/)
+    expect(errorText()).toMatch(/não pode ser zero/)
   })
 
   it('solves the rule of three both ways and refuses zero', async () => {
@@ -180,7 +187,7 @@ describe('calculators', () => {
     expect(document.querySelector('output')!.textContent).toBe('4')
     await user.clear(field('C'))
     await user.type(field('C'), '0')
-    expect(screen.getByRole('alert').textContent).toMatch(/C não pode ser zero/)
+    expect(errorText()).toMatch(/C não pode ser zero/)
   })
 })
 
@@ -235,7 +242,7 @@ describe('generators', () => {
     expect(screen.getByText(/CPF válido/)).toBeTruthy()
     await user.clear(field('CPF para conferir'))
     await user.type(field('CPF para conferir'), '529.982.247-26')
-    expect(screen.getByRole('alert').textContent).toMatch(/não conferem/)
+    expect(errorText()).toMatch(/não conferem/)
   })
 
   it('generates valid CNPJs in both formats', async () => {

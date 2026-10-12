@@ -1,5 +1,6 @@
 import { useId, type ReactNode } from 'react'
 import { cn } from '../../../lib/cn'
+import { ErrorMessage } from './ErrorMessage'
 
 interface CodeInputProps {
   id?: string
@@ -8,6 +9,10 @@ interface CodeInputProps {
   onChange: (value: string) => void
   placeholder?: string
   error?: string | null
+  /** Title of the error message rendered under the field. */
+  errorTitle?: string
+  errorLine?: number
+  errorColumn?: number
   actions?: ReactNode
   footer?: ReactNode
   className?: string
@@ -25,6 +30,9 @@ export function CodeInput({
   onChange,
   placeholder = 'Cole ou digite seu código aqui…',
   error,
+  errorTitle,
+  errorLine,
+  errorColumn,
   actions,
   footer,
   className,
@@ -67,14 +75,23 @@ export function CodeInput({
             autoCorrect="off"
             autoCapitalize="off"
             className={cn(
-              'w-full resize-y rounded-2xl border bg-slate-50/60 p-4 leading-relaxed text-ink transition-all placeholder:text-slate-400',
+              'w-full resize-y rounded-2xl border bg-slate-50/60 p-4 leading-relaxed text-ink transition-all placeholder:text-subtle',
               prose ? 'font-sans text-[15px]' : 'font-mono text-[13px]',
               minHeight,
-              'focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400',
-              error ? 'border-rose-300 bg-rose-50/20 focus:border-rose-400 focus:ring-rose-400' : 'border-slate-200/80',
+              'focus:bg-white',
+              error ? 'border-rose-500 bg-rose-50/20' : 'border-line-strong',
             )}
           />
         </div>
+
+        <ErrorMessage
+          id={errorId}
+          error={error}
+          title={errorTitle}
+          line={errorLine}
+          column={errorColumn}
+          className="mt-3"
+        />
       </div>
 
       {footer && <div className="mt-4 pt-3 border-t border-slate-100">{footer}</div>}

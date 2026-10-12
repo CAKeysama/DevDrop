@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { tools } from '../../data/tools'
+import { formatToolCount } from '../../data/tools'
 import { links } from '../../lib/links'
 import { ButtonLink } from '../ui/Button'
 
@@ -13,7 +13,7 @@ export function HeroContent() {
     >
       <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-slate-200/60 bg-white/80 px-3 py-1.5 text-[12px] font-semibold text-slate-600">
         <span aria-hidden="true" className="size-1.5 rounded-full bg-emerald-500" />
-        {tools.filter((tool) => tool.status === 'available').length} ferramentas
+        {formatToolCount()}
         <span className="hidden sm:inline">· tudo roda no seu navegador</span>
       </p>
       <h1 className="font-display text-balance text-[30px] leading-[1.1] sm:text-[42px] md:text-[56px] md:leading-[1.05] font-medium tracking-tight text-[#0a1b33]">

@@ -5,7 +5,7 @@ import { SiteHeader } from '../components/layout/SiteHeader'
 import { CategoryPills } from '../components/tools/CategoryPills'
 import { categoryIcons } from '../components/tools/categoryIcons'
 import { SearchField } from '../components/ui/SearchField'
-import { categories, isCategoryId, searchTools, tools, type CategoryId, type Tool } from '../data/tools'
+import { categories, formatToolCount, getAvailableTools, isCategoryId, searchTools, type CategoryId, type Tool } from '../data/tools'
 import { links } from '../lib/links'
 
 function buildHref(category: CategoryId | null, query: string) {
@@ -16,32 +16,38 @@ function buildHref(category: CategoryId | null, query: string) {
   return search ? `${links.tools}?${search}` : links.tools
 }
 
+const suggestedQueries = ['json', 'base64', 'jwt', 'url']
+
 function ToolCard({ tool }: { tool: Tool }) {
-  const body = (
-    <>
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="font-display text-[18px] font-medium tracking-tight text-ink">{tool.name}</h3>
-        {tool.status === 'planned' && (
-          <span className="shrink-0 rounded-full bg-canvas px-2.5 py-1 text-[11px] font-semibold text-slate-500 ring-1 ring-slate-200/70">
-            Em breve
-          </span>
-        )}
-      </div>
-      <p className="mt-2 text-[14px] leading-relaxed text-muted">{tool.description}</p>
-    </>
-  )
-
-  const cardClass = 'block h-full rounded-3xl border border-slate-200/60 bg-white p-5 shadow-card'
-
   // A tool only becomes a link once it has a real route.
   if (tool.status === 'available' && tool.path) {
     return (
-      <Link to={tool.path} className={`${cardClass} transition-colors hover:border-slate-300`}>
-        {body}
+      <Link
+        to={tool.path}
+        className="block h-full rounded-3xl border border-slate-200/60 bg-white p-5 shadow-card transition-colors hover:border-slate-300"
+      >
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="font-display text-[18px] font-medium tracking-tight text-ink">{tool.name}</h3>
+          <span className="shrink-0 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-800 ring-1 ring-emerald-200">
+            Disponível
+          </span>
+        </div>
+        <p className="mt-2 text-[14px] leading-relaxed text-muted">{tool.description}</p>
       </Link>
     )
   }
-  return <div className={cardClass}>{body}</div>
+
+  return (
+    <div className="block h-full rounded-3xl border border-dashed border-slate-300 bg-canvas p-5">
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="font-display text-[18px] font-medium tracking-tight text-muted">{tool.name}</h3>
+        <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold text-muted ring-1 ring-slate-300">
+          Em breve
+        </span>
+      </div>
+      <p className="mt-2 text-[14px] leading-relaxed text-muted">{tool.description}</p>
+    </div>
+  )
 }
 
 export default function ToolsPage() {
@@ -53,9 +59,11 @@ export default function ToolsPage() {
   const results = useMemo(() => searchTools(query, category), [query, category])
   const groups = useMemo(
     () =>
+      // Groups follow the ranking: the category of the best result comes first.
       categories
         .map((item) => ({ category: item, tools: results.filter((tool) => tool.categoryId === item.id) }))
-        .filter((group) => group.tools.length > 0),
+        .filter((group) => group.tools.length > 0)
+        .sort((a, b) => results.indexOf(a.tools[0]) - results.indexOf(b.tools[0])),
     [results],
   )
 
@@ -71,7 +79,7 @@ export default function ToolsPage() {
       <title>Todas as ferramentas — DevDrop</title>
       <meta
         name="description"
-        content="Catálogo do DevDrop: ferramentas de desenvolvimento, geradores de dados, CSS, segurança, texto e calculadoras."
+        content="Catálogo do DevDrop: formatadores, geradores de dados, CSS, segurança, texto e calculadoras, direto no navegador e sem cadastro."
       />
       <SiteHeader />
 
@@ -79,7 +87,7 @@ export default function ToolsPage() {
         <div className="pt-10 md:pt-16">
           <h1 className="font-display text-[36px] font-medium leading-[1.08] tracking-tight text-ink md:text-[52px]">Todas as ferramentas</h1>
           <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted">
-            {tools.length} ferramentas em {categories.length} categorias. Todas funcionam direto no navegador, sem
+            {formatToolCount()} em {categories.length} categorias. Todas funcionam direto no navegador, sem
             cadastro.
           </p>
         </div>
@@ -97,20 +105,51 @@ export default function ToolsPage() {
         </div>
 
         <p aria-live="polite" className="mt-8 text-[13px] font-medium text-slate-500">
-          {results.length === 1 ? '1 ferramenta' : `${results.length} ferramentas`}
+          {results.length === 0 ? 'Nenhuma ferramenta' : formatToolCount(results)}
           {query && <> para “{query}”</>}
         </p>
 
         {groups.length === 0 ? (
           <div className="mt-4 rounded-card border border-slate-200/60 bg-white p-8 text-center shadow-card sm:p-12">
             <p className="font-display text-[22px] font-medium tracking-tight text-ink">Nenhuma ferramenta encontrada</p>
-            <p className="mt-2 text-[14px] text-muted">Tente outro termo ou veja o catálogo completo.</p>
-            <Link
-              to={links.tools}
-              className="mt-6 inline-flex rounded-full bg-navy px-6 py-3 text-[14px] font-semibold text-white"
-            >
-              Limpar filtros
-            </Link>
+            <p className="mt-2 text-[14px] text-muted">
+              Tente buscar pelo formato ({suggestedQueries.map((q, i) => (
+                <span key={q}>
+                  {i > 0 && ', '}
+                  <Link to={buildHref(null, q)} className="font-semibold text-ink underline underline-offset-2">
+                    {q}
+                  </Link>
+                </span>
+              ))}) ou abra uma das ferramentas disponíveis:
+            </p>
+            <ul className="mt-5 flex flex-wrap justify-center gap-2">
+              {getAvailableTools().map((tool) => (
+                <li key={tool.id}>
+                  <Link
+                    to={tool.path!}
+                    className="inline-flex rounded-full border border-slate-300 bg-white px-3.5 py-2 text-[13px] font-semibold text-ink hover:border-ink"
+                  >
+                    {tool.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <Link
+                to={links.tools}
+                className="inline-flex rounded-full bg-navy px-6 py-3 text-[14px] font-semibold text-white"
+              >
+                Limpar filtros
+              </Link>
+              <a
+                href={links.suggest}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex rounded-full border border-slate-300 bg-white px-6 py-3 text-[14px] font-semibold text-ink"
+              >
+                Sugerir esta ferramenta<span className="sr-only"> (abre em nova aba)</span>
+              </a>
+            </div>
           </div>
         ) : (
           <div className="mt-4 space-y-12">

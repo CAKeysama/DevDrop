@@ -62,11 +62,10 @@ export function CodeOutput({
             aria-label={label}
             spellCheck={false}
             className={cn(
-              'w-full resize-y rounded-2xl border border-slate-200/80 bg-slate-50/60 p-4 leading-relaxed text-ink transition-all placeholder:text-slate-400',
+              'w-full resize-y rounded-2xl border border-line-strong bg-slate-50/60 p-4 leading-relaxed text-ink transition-all placeholder:text-subtle',
               prose ? 'font-sans text-[15px]' : 'font-mono text-[13px]',
               minHeight,
-              'focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400',
-              !value && 'text-slate-400',
+              'focus:bg-white',
             )}
           />
         </div>
