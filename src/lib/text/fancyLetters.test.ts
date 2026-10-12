@@ -47,11 +47,18 @@ describe('applyStyle', () => {
   })
 
   it('keeps the accent in every style, including the ones that add a mark', () => {
-    for (const item of fancyStyles) {
+    for (const item of fancyStyles.filter((candidate) => candidate.accents !== 'plain')) {
       const result = applyStyle('ã', item)
       expect(result, item.id).toContain('̃')
     }
     expect([...applyStyle('é', style('strikethrough'))]).toEqual(['e', '̶', '́'])
+  })
+
+  it('leaves an accented letter plain where the alphabet cannot carry the accent', () => {
+    // A combining mark after a circled or full-width letter is drawn as an empty box.
+    expect(applyStyle('ação', style('circled'))).toBe('ⓐçãⓞ')
+    expect(applyStyle('á', style('fullwidth'))).toBe('á')
+    expect(fancyStyles.filter((item) => item.accents === 'plain').map((item) => item.id)).toEqual(['circled', 'fullwidth'])
   })
 
   it('keeps a cedilla and a family emoji whole', () => {

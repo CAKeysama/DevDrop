@@ -234,7 +234,7 @@ export const tools: Tool[] = [
   {
     id: 'number-to-words',
     name: 'Número por extenso',
-    description: 'Escreve números e valores em reais por extenso: 1250 vira "mil duzentos e cinquenta".',
+    description: 'Escreve números, valores em dinheiro e ordinais por extenso: 1250 vira "mil duzentos e cinquenta".',
     categoryId: 'text',
     status: 'available',
     path: '/tools/number-to-words',

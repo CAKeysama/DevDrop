@@ -5,6 +5,12 @@ export interface FancyStyle {
   label: string
   /** Style of one character (a letter, a digit or anything else, which most styles leave alone). */
   apply: (character: string) => string
+  /**
+   * What happens to a letter with an accent. Most alphabets take the accent as a combining
+   * mark on top of the styled letter. Circled and full-width ones do not: the mark turns into
+   * an empty box, so the accented letter is left as it was typed.
+   */
+  accents?: 'combine' | 'plain'
 }
 
 /**
@@ -62,6 +68,7 @@ export const fancyStyles: FancyStyle[] = [
   {
     id: 'circled',
     label: 'Circulado',
+    accents: 'plain',
     apply: (character) => {
       const code = character.codePointAt(0)!
       if (code >= 0x41 && code <= 0x5a) return String.fromCodePoint(0x24b6 + code - 0x41)
@@ -74,6 +81,7 @@ export const fancyStyles: FancyStyle[] = [
   {
     id: 'fullwidth',
     label: 'Largura total',
+    accents: 'plain',
     apply: (character) => {
       const code = character.codePointAt(0)!
       if (code === 0x20) return String.fromCodePoint(0x3000)
@@ -94,6 +102,7 @@ export function applyStyle(text: string, style: FancyStyle): string {
     .map((cluster) => {
       // A visible character can be a letter plus marks ("e" + accent): style the letter, keep the marks.
       const [base, ...marks] = Array.from(cluster)
+      if (marks.length > 0 && style.accents === 'plain') return cluster.normalize('NFC')
       return style.apply(base) + marks.join('')
     })
     .join('')

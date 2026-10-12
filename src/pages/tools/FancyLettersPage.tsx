@@ -56,6 +56,10 @@ export default function FancyLettersPage() {
               </li>
             ))}
           </ul>
+          <p className="mt-4 text-[12px] text-slate-500">
+            Em “Circulado” e “Largura total”, as letras com acento ficam como foram digitadas: esses alfabetos não têm
+            acento e o navegador o mostraria como um quadradinho.
+          </p>
         </ToolPanel>
       </div>
     </ToolShell>
