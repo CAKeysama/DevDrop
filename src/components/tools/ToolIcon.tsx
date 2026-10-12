@@ -23,6 +23,7 @@ import {
   ShieldCheck,
   SquareDashed,
   WholeWord,
+  WrapText,
   Wrench,
   type LucideIcon,
 } from 'lucide-react'
@@ -41,6 +42,7 @@ const icons: Record<string, LucideIcon> = {
   'case-converter': CaseSensitive,
   'text-reverser': FlipHorizontal2,
   'remove-accents': Eraser,
+  'line-breaks': WrapText,
   percentage: Percent,
   'rule-of-three': Equal,
   uuid: Fingerprint,

@@ -35,6 +35,7 @@ const CssGradientPage = lazy(() => import('./pages/tools/CssGradientPage'))
 const CssBorderPage = lazy(() => import('./pages/tools/CssBorderPage'))
 const TextReverserPage = lazy(() => import('./pages/tools/TextReverserPage'))
 const RemoveAccentsPage = lazy(() => import('./pages/tools/RemoveAccentsPage'))
+const LineBreaksPage = lazy(() => import('./pages/tools/LineBreaksPage'))
 
 export default function App() {
   return (
@@ -71,6 +72,7 @@ export default function App() {
                 <Route path="/tools/css-border" element={<CssBorderPage />} />
                 <Route path="/tools/text-reverser" element={<TextReverserPage />} />
                 <Route path="/tools/remove-accents" element={<RemoveAccentsPage />} />
+                <Route path="/tools/line-breaks" element={<LineBreaksPage />} />
                 <Route path="/privacidade" element={<PrivacyPage />} />
                 <Route path="/cookies" element={<CookiesPage />} />
                 <Route path="*" element={<NotFoundPage />} />

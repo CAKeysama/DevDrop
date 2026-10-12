@@ -16,6 +16,7 @@ import CssGradientPage from './CssGradientPage'
 import CssShadowPage from './CssShadowPage'
 import HashGeneratorPage from './HashGeneratorPage'
 import LoremIpsumPage from './LoremIpsumPage'
+import LineBreaksPage from './LineBreaksPage'
 import PasswordGeneratorPage from './PasswordGeneratorPage'
 import PasswordStrengthPage from './PasswordStrengthPage'
 import PercentagePage from './PercentagePage'
@@ -60,6 +61,7 @@ const pages: Array<[string, ComponentType]> = [
   ['Maiúsculas e minúsculas', CaseConverterPage],
   ['Inverter texto', TextReverserPage],
   ['Remover acentos', RemoveAccentsPage],
+  ['Remover quebras de linha', LineBreaksPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -188,6 +190,25 @@ describe('remove accents', () => {
 
     await user.click(screen.getByRole('checkbox', { name: 'Manter o ç' }))
     expect(area('remove-accents-output').value).toBe('Açao e coraçao')
+  })
+})
+
+describe('line breaks', () => {
+  it('joins lines, swaps for a custom separator and skips blank lines', async () => {
+    const user = open(LineBreaksPage)
+    await user.click(area('line-breaks-input'))
+    await user.paste('um\n\ndois\ntrês')
+    expect(area('line-breaks-output').value).toBe('um dois três')
+    expect(document.body.textContent).toMatch(/3 quebras de linha trocadas/)
+
+    await user.click(screen.getByRole('radio', { name: 'Trocar por…' }))
+    await user.clear(field('Trocar por'))
+    await user.type(field('Trocar por'), '; ')
+    expect(area('line-breaks-output').value).toBe('um; dois; três')
+
+    await user.click(screen.getByRole('radio', { name: 'Remover' }))
+    expect(area('line-breaks-output').value).toBe('umdoistrês')
+    expect(document.body.textContent).toMatch(/3 quebras de linha removidas/)
   })
 })
 

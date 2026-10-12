@@ -177,6 +177,15 @@ export const tools: Tool[] = [
     path: '/tools/remove-accents',
     keywords: ['acento', 'acentos', 'acentuacao', 'sem acento', 'tirar acento', 'cedilha', 'til', 'diacriticos', 'normalizar', 'slug', 'ascii'],
   },
+  {
+    id: 'line-breaks',
+    name: 'Remover quebras de linha',
+    description: 'Remove as quebras de linha de um texto ou troca por espaço, vírgula ou outro texto.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/line-breaks',
+    keywords: ['quebra', 'quebras', 'linha', 'linhas', 'enter', 'newline', 'juntar', 'unir', 'trocar', 'paragrafo', 'line break', 'texto corrido'],
+  },
 
   {
     id: 'percentage',
