@@ -2,6 +2,8 @@
 
 Um hub centralizado de ferramentas e utilitários projetado para facilitar a vida de desenvolvedores e usuários comuns. De geradores de senhas seguras a formatadores de JSON, tudo em uma interface limpa, rápida e sem distrações.
 
+**🌐 No ar:** [devdrop-tools.vercel.app](https://devdrop-tools.vercel.app)
+
 ## 🚀 Funcionalidades
 
 Tudo roda no navegador: o que você cola não é enviado a nenhum servidor.
@@ -69,7 +71,7 @@ O sitemap é gerado no build a partir de `src/data/tools.ts`, então uma ferrame
 
 ## 🚀 Deploy
 
-O site é hospedado na Vercel, ligada a este repositório:
+O site é hospedado na Vercel ([devdrop-tools.vercel.app](https://devdrop-tools.vercel.app)), ligada a este repositório:
 
 - **Push no `main`** publica em produção; **pull requests** ganham uma URL de preview.
 - O build da Vercel roda `npm run lint && npm test && npm run build` (veja `vercel.json`): se algo falhar, o deploy
@@ -79,6 +81,8 @@ O site é hospedado na Vercel, ligada a este repositório:
   O CSP libera o script inline do `index.html` pelo hash: se você alterar esse script, atualize o hash
   (o teste `src/deploy.test.ts` avisa).
 - `npm run preview` serve o build com os mesmos cabeçalhos de produção.
+- O endereço oficial vem da variável `SITE_URL` do projeto na Vercel (sitemap, robots.txt e imagem de prévia);
+  `devdrop-ten.vercel.app`, criado automaticamente, redireciona para ele.
 
 ## 💡 Sugestões e privacidade
 

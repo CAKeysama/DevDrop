@@ -3,6 +3,14 @@
   "framework": "vite",
   "buildCommand": "npm run lint && npm test && npm run build",
   "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "devdrop-ten.vercel.app" }],
+      "destination": "https://devdrop-tools.vercel.app/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "headers": [
     {
