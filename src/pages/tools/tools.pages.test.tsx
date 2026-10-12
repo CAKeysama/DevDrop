@@ -21,6 +21,7 @@ import PasswordStrengthPage from './PasswordStrengthPage'
 import PercentagePage from './PercentagePage'
 import RuleOfThreePage from './RuleOfThreePage'
 import UuidGeneratorPage from './UuidGeneratorPage'
+import TextReverserPage from './TextReverserPage'
 import WordCounterPage from './WordCounterPage'
 
 afterEach(cleanup)
@@ -56,6 +57,7 @@ const pages: Array<[string, ComponentType]> = [
   ['Contador de caracteres', CharacterCounterPage],
   ['Contador de palavras', WordCounterPage],
   ['Maiúsculas e minúsculas', CaseConverterPage],
+  ['Inverter texto', TextReverserPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -151,6 +153,26 @@ describe('text tools', () => {
     await user.click(button('Copiar'))
     expect(button('Copiado!')).toBeTruthy()
     expect(await clipboard()).toBe('Olá Mundo')
+  })
+})
+
+describe('text transform tools', () => {
+  it('reverses a text in each mode, keeping emoji whole, and copies the result', async () => {
+    const user = open(TextReverserPage)
+    await user.click(area('text-reverser-input'))
+    await user.paste('um dois 🚀')
+    expect(area('text-reverser-output').value).toBe('🚀 siod mu')
+
+    await user.click(screen.getByRole('radio', { name: 'Ordem das palavras' }))
+    expect(area('text-reverser-output').value).toBe('🚀 dois um')
+
+    await user.click(screen.getByRole('radio', { name: 'Letras de cada palavra' }))
+    expect(area('text-reverser-output').value).toBe('mu siod 🚀')
+
+    await user.click(button('Copiar'))
+    expect(await clipboard()).toBe('mu siod 🚀')
+    await user.click(button('Limpar'))
+    expect(area('text-reverser-output').value).toBe('')
   })
 })
 

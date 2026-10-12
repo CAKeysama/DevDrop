@@ -33,6 +33,7 @@ const CnpjPage = lazy(() => import('./pages/tools/CnpjPage'))
 const CssShadowPage = lazy(() => import('./pages/tools/CssShadowPage'))
 const CssGradientPage = lazy(() => import('./pages/tools/CssGradientPage'))
 const CssBorderPage = lazy(() => import('./pages/tools/CssBorderPage'))
+const TextReverserPage = lazy(() => import('./pages/tools/TextReverserPage'))
 
 export default function App() {
   return (
@@ -67,6 +68,7 @@ export default function App() {
                 <Route path="/tools/css-shadow" element={<CssShadowPage />} />
                 <Route path="/tools/css-gradient" element={<CssGradientPage />} />
                 <Route path="/tools/css-border" element={<CssBorderPage />} />
+                <Route path="/tools/text-reverser" element={<TextReverserPage />} />
                 <Route path="/privacidade" element={<PrivacyPage />} />
                 <Route path="/cookies" element={<CookiesPage />} />
                 <Route path="*" element={<NotFoundPage />} />

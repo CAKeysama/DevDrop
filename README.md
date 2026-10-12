@@ -34,13 +34,13 @@ npm test         # Vitest (lógica das ferramentas e páginas)
 
 ## 🧰 Ferramentas e rotas
 
-Todas as 21 ferramentas funcionam no navegador, sem enviar dados a servidores.
+Todas as ferramentas funcionam no navegador, sem enviar dados a servidores.
 
 | Categoria | Ferramentas (rota `/tools/<id>`) |
 |---|---|
 | Desenvolvimento | `json-formatter`, `xml-formatter`, `sql-formatter`, `base64`, `url-encoder`, `jwt-decoder` |
 | Segurança | `password-generator`, `password-strength` |
-| Texto | `character-counter`, `word-counter`, `case-converter` |
+| Texto | `character-counter`, `word-counter`, `case-converter`, `text-reverser` |
 | Calculadoras | `percentage`, `rule-of-three` |
 | Geradores de dados | `uuid`, `lorem-ipsum`, `hash-generator`, `cpf`, `cnpj` |
 | CSS | `css-shadow`, `css-gradient`, `css-border` |

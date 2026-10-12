@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Link } from 'react-router-dom'
 import { formatToolCount, getToolHref, getToolsByCategory, type Category } from '../../data/tools'
+import { splitChips } from '../../lib/chips'
 import { categoryHref } from '../../lib/links'
 import { cn } from '../../lib/cn'
 import { categoryIcons } from '../tools/categoryIcons'
@@ -20,6 +21,7 @@ interface ToolCategoryCardProps {
 export function ToolCategoryCard({ category, featured = false, wide = false, className }: ToolCategoryCardProps) {
   const Icon = categoryIcons[category.id]
   const tools = getToolsByCategory(category.id)
+  const { visible: visibleTools, hidden: hiddenCount } = splitChips(tools)
 
   return (
     <motion.article
@@ -68,7 +70,7 @@ export function ToolCategoryCard({ category, featured = false, wide = false, cla
 
         <div className={cn('flex flex-col gap-5', wide && 'lg:items-end')}>
           <ul className={cn('flex flex-wrap gap-2', wide && 'lg:justify-end')}>
-            {tools.map((tool) => (
+            {visibleTools.map((tool) => (
               <li key={tool.id}>
                 {tool.status === 'available' ? (
                   <Link
@@ -98,6 +100,23 @@ export function ToolCategoryCard({ category, featured = false, wide = false, cla
                 )}
               </li>
             ))}
+            {hiddenCount > 0 && (
+              <li>
+                <Link
+                  to={categoryHref(category.id)}
+                  aria-label={`Ver mais ${hiddenCount} ferramentas em ${category.name}`}
+                  className={cn(
+                    chip,
+                    'relative z-10 font-semibold',
+                    featured
+                      ? 'border-white/40 text-white hover:border-white hover:bg-white/15 focus-visible:outline-white'
+                      : 'border-line-strong text-ink hover:border-ink',
+                  )}
+                >
+                  +{hiddenCount}
+                </Link>
+              </li>
+            )}
           </ul>
           <span aria-hidden="true" className={cn('inline-flex items-center gap-1.5 text-[13px] font-semibold', featured ? 'text-white' : 'text-ink')}>
             Ver categoria

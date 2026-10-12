@@ -36,9 +36,10 @@ describe('tool registry', () => {
 describe('catalog completeness', () => {
   const app = readFileSync(new URL('../App.tsx', import.meta.url), 'utf-8')
 
-  it('has 21 tools in 6 categories, all available', () => {
-    expect(tools).toHaveLength(21)
+  it('keeps every tool available, in the six categories', () => {
+    expect(tools.length).toBeGreaterThanOrEqual(21)
     expect(categories).toHaveLength(6)
+    expect(new Set(tools.map((tool) => tool.categoryId)).size).toBe(6)
     expect(tools.filter((tool) => tool.status !== 'available')).toEqual([])
   })
 

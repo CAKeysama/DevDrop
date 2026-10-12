@@ -27,7 +27,8 @@ function seo(): Plugin {
   const url = siteUrl()
   return {
     name: 'devdrop-seo',
-    transformIndexHtml: (html) => html.replaceAll('%SITE_URL%', url),
+    transformIndexHtml: (html) =>
+      html.replaceAll('%SITE_URL%', url).replaceAll('%TOOL_COUNT%', String(tools.filter((tool) => tool.status === 'available').length)),
     generateBundle() {
       const today = new Date().toISOString().slice(0, 10)
       const entries = sitemapPaths()

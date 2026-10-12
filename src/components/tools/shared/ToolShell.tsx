@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom'
 import { ArrowUpRight, ChevronRight, Lock } from 'lucide-react'
 import { SiteHeader } from '../../layout/SiteHeader'
 import { SiteFooter } from '../../layout/SiteFooter'
-import { links } from '../../../lib/links'
+import { categoryHref, links } from '../../../lib/links'
 import { categories, getToolsByCategory, getToolHref, type CategoryId } from '../../../data/tools'
 import { ToolIcon } from '../ToolIcon'
 import { cn } from '../../../lib/cn'
+
+const MAX_RELATED = 6
 
 interface ToolShellProps {
   toolId: string
@@ -30,7 +32,10 @@ export function ToolShell({
   className,
 }: ToolShellProps) {
   const category = categories.find((c) => c.id === categoryId)
-  const relatedTools = getToolsByCategory(categoryId).filter((t) => t.id !== toolId)
+  // A category can hold a dozen tools; the page shows a handful and links to the rest.
+  const relatedTools = getToolsByCategory(categoryId)
+    .filter((t) => t.id !== toolId)
+    .slice(0, MAX_RELATED)
 
   return (
     <div className="px-3 pt-3 sm:px-6 sm:pt-6">
@@ -109,10 +114,10 @@ export function ToolShell({
                 Mais em {category.name}
               </h2>
               <Link
-                to={links.tools}
+                to={categoryHref(category.id)}
                 className="text-[12px] font-semibold text-muted hover:text-ink transition-colors"
               >
-                Ver todas as ferramentas
+                Ver todas em {category.name}
               </Link>
             </div>
 

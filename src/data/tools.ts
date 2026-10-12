@@ -38,7 +38,7 @@ export const categories: Category[] = [
   {
     id: 'text',
     name: 'Texto',
-    description: 'Conte caracteres e palavras e converta entre maiúsculas e minúsculas.',
+    description: 'Conte, converta, limpe e transforme textos sem sair do navegador.',
   },
   {
     id: 'calculators',
@@ -158,6 +158,15 @@ export const tools: Tool[] = [
     status: 'available',
     path: '/tools/case-converter',
     keywords: ['case', 'converter', 'uppercase', 'lowercase', 'caixa alta', 'caixa baixa', 'conversor', 'title case'],
+  },
+  {
+    id: 'text-reverser',
+    name: 'Inverter texto',
+    description: 'Inverte o texto, as letras de cada palavra, a ordem das palavras ou das linhas.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/text-reverser',
+    keywords: ['inverter', 'inverso', 'reverso', 'reverse', 'espelhar', 'ao contrario', 'de tras para frente', 'palindromo', 'invertido'],
   },
 
   {
