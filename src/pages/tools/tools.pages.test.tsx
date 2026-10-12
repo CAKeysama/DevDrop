@@ -6,11 +6,14 @@ import { MemoryRouter } from 'react-router-dom'
 import { afterEach, describe, expect, it } from 'vitest'
 import { validateCnpj } from '../../lib/generators/cnpj'
 import { validateCpf } from '../../lib/generators/cpf'
+import { pis } from '../../lib/generators/pis'
+import { validateVoterId } from '../../lib/generators/voterId'
 import { isUuidV4 } from '../../lib/generators/uuid'
 import CaseConverterPage from './CaseConverterPage'
 import CharInfoPage from './CharInfoPage'
 import CharacterCounterPage from './CharacterCounterPage'
 import CnpjPage from './CnpjPage'
+import CnhPage from './CnhPage'
 import CpfPage from './CpfPage'
 import CssBorderPage from './CssBorderPage'
 import CssGradientPage from './CssGradientPage'
@@ -20,9 +23,11 @@ import HashGeneratorPage from './HashGeneratorPage'
 import LoremIpsumPage from './LoremIpsumPage'
 import LineBreaksPage from './LineBreaksPage'
 import NumberToWordsPage from './NumberToWordsPage'
+import PisPage from './PisPage'
 import PasswordGeneratorPage from './PasswordGeneratorPage'
 import PasswordStrengthPage from './PasswordStrengthPage'
 import PercentagePage from './PercentagePage'
+import RenavamPage from './RenavamPage'
 import RuleOfThreePage from './RuleOfThreePage'
 import UuidGeneratorPage from './UuidGeneratorPage'
 import RemoveAccentsPage from './RemoveAccentsPage'
@@ -31,6 +36,7 @@ import TextCutterPage from './TextCutterPage'
 import TextReverserPage from './TextReverserPage'
 import TextToHtmlPage from './TextToHtmlPage'
 import TextSplitterPage from './TextSplitterPage'
+import VoterIdPage from './VoterIdPage'
 import WordCounterPage from './WordCounterPage'
 import WordOccurrencesPage from './WordOccurrencesPage'
 
@@ -78,6 +84,10 @@ const pages: Array<[string, ComponentType]> = [
   ['Informações de caractere', CharInfoPage],
   ['Número por extenso', NumberToWordsPage],
   ['Letras personalizadas', FancyLettersPage],
+  ['PIS/PASEP', PisPage],
+  ['Título de eleitor', VoterIdPage],
+  ['RENAVAM', RenavamPage],
+  ['CNH', CnhPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -373,6 +383,54 @@ describe('fancy letters', () => {
     const row = bold.closest('li')!
     await user.click(within(row).getByRole('button', { name: 'Copiar' }))
     expect(await clipboard()).toBe('\u{1D40E}\u{1D425}\u{1D41A}')
+  })
+})
+
+describe('document tools', () => {
+  it('PIS/PASEP: generates, toggles the mask on the same numbers and validates', async () => {
+    const user = open(PisPage)
+    const list = () => area('pis-pasep-generated').value.split('\n')
+    expect(pis.validate(list()[0]).valid).toBe(true)
+    await user.clear(field('Quantidade'))
+    await user.type(field('Quantidade'), '5')
+    await user.click(button('Gerar'))
+    expect(list()).toHaveLength(5)
+    expect(list().every((value) => pis.validate(value).valid)).toBe(true)
+    const masked = list()
+    await user.click(screen.getByRole('checkbox', { name: /Com máscara/ }))
+    expect(list()).toEqual(masked.map((value) => value.replace(/\D/g, '')))
+
+    await user.type(field('PIS/PASEP para conferir'), '160.92269.74-1')
+    expect(screen.getByText(/PIS\/PASEP válido:/)).toBeTruthy()
+    await user.clear(field('PIS/PASEP para conferir'))
+    await user.type(field('PIS/PASEP para conferir'), '160.92269.74-2')
+    expect(errorText()).toMatch(/não conferem/)
+  })
+
+  it('Título de eleitor: generates for the chosen state', async () => {
+    const user = open(VoterIdPage)
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Estado' }), '03')
+    await user.clear(field('Quantidade'))
+    await user.type(field('Quantidade'), '8')
+    await user.click(button('Gerar'))
+    const values = area('titulo-eleitor-generated').value.split('\n')
+    expect(values).toHaveLength(8)
+    for (const value of values) {
+      const digits = value.replace(/\D/g, '')
+      expect(digits.slice(8, 10)).toBe('03')
+      expect(validateVoterId(digits).valid).toBe(true)
+    }
+  })
+
+  it('CNH and RENAVAM: no mask option, and the feminine in the texts', async () => {
+    open(CnhPage)
+    expect(screen.queryByRole('checkbox', { name: /Com máscara/ })).toBeNull()
+    expect(document.body.textContent).toMatch(/CNHs? geradas?|CNH geradas/)
+    expect(document.body.textContent).toMatch(/Digite uma CNH/)
+    cleanup()
+    open(RenavamPage)
+    expect(screen.queryByRole('checkbox', { name: /Com máscara/ })).toBeNull()
+    expect(document.body.textContent).toMatch(/Digite um RENAVAM/)
   })
 })
 

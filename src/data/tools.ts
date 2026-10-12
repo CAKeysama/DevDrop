@@ -48,7 +48,7 @@ export const categories: Category[] = [
   {
     id: 'data',
     name: 'Geradores de dados',
-    description: 'Dados de teste na hora: UUID, Lorem Ipsum, hashes, CPF e CNPJ.',
+    description: 'Dados de teste na hora: UUID, Lorem Ipsum, hashes e documentos como CPF, CNPJ, PIS, CNH e título de eleitor.',
   },
   {
     id: 'css',
@@ -322,6 +322,42 @@ export const tools: Tool[] = [
     status: 'available',
     path: '/tools/cnpj',
     keywords: ['cnpj', 'documento', 'gerador', 'validador', 'generator', 'validar', 'empresa', 'alfanumerico'],
+  },
+  {
+    id: 'pis-pasep',
+    name: 'PIS/PASEP',
+    description: 'Gera PIS/PASEP válidos para testes e confere os dígitos verificadores de um número.',
+    categoryId: 'data',
+    status: 'available',
+    path: '/tools/pis-pasep',
+    keywords: ['pis', 'pasep', 'nit', 'trabalhador', 'inss', 'fgts', 'documento', 'gerador', 'validador', 'digito verificador'],
+  },
+  {
+    id: 'voter-id',
+    name: 'Título de eleitor',
+    description: 'Gera títulos de eleitor válidos para testes, por estado, e confere os dígitos verificadores.',
+    categoryId: 'data',
+    status: 'available',
+    path: '/tools/voter-id',
+    keywords: ['titulo', 'eleitor', 'eleitoral', 'tse', 'votar', 'inscricao eleitoral', 'documento', 'gerador', 'validador', 'uf'],
+  },
+  {
+    id: 'renavam',
+    name: 'RENAVAM',
+    description: 'Gera RENAVAM válidos para testes e confere o dígito verificador de um número.',
+    categoryId: 'data',
+    status: 'available',
+    path: '/tools/renavam',
+    keywords: ['renavam', 'veiculo', 'carro', 'moto', 'detran', 'documento do carro', 'gerador', 'validador', 'digito verificador'],
+  },
+  {
+    id: 'cnh',
+    name: 'CNH',
+    description: 'Gera números de CNH válidos para testes e confere os dígitos verificadores do registro.',
+    categoryId: 'data',
+    status: 'available',
+    path: '/tools/cnh',
+    keywords: ['cnh', 'habilitacao', 'carteira de motorista', 'motorista', 'detran', 'registro', 'documento', 'gerador', 'validador'],
   },
 
   {

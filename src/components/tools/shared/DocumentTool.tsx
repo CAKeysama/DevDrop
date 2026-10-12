@@ -14,8 +14,20 @@ import { ToolPanel } from './ToolPanel'
 const MAX_QUANTITY = 100
 
 interface DocumentToolProps {
-  /** "CPF" or "CNPJ". */
+  /** "CPF", "CNPJ", "PIS/PASEP"… as it is written in the page. */
   name: string
+  /** The document is feminine in Portuguese ("uma CNH", "geradas"). */
+  feminine?: boolean
+  /** Used in element ids and file names; defaults to the lowercase name. */
+  slug?: string
+  /** The number is typed with digits only, so phones show the numeric keypad. */
+  numericInput?: boolean
+  /** The document has a canonical mask; when it does not, the mask option is hidden. */
+  maskable?: boolean
+  /** What the mask adds, shown under the option. */
+  maskHint?: string
+  /** Who issues the document, for the note that the check is only mathematical. */
+  authority?: string
   /** Generates one number, without mask. */
   generate: () => string
   /** Shows a number with or without the mask. */
@@ -32,8 +44,26 @@ interface DocumentToolProps {
   note?: ReactNode
 }
 
-/** Generator + validator shared by the CPF and CNPJ tools. */
-export function DocumentTool({ name, generate, display, validate, placeholder, example, options, variant = '', note }: DocumentToolProps) {
+/** Generator + validator shared by the tools of documents with check digits (CPF, CNPJ, PIS, CNH…). */
+export function DocumentTool({
+  name,
+  feminine = false,
+  slug = name.toLowerCase(),
+  numericInput = name === 'CPF',
+  maskable = true,
+  maskHint = 'Pontos, barra e hífen.',
+  authority = 'a Receita Federal',
+  generate,
+  display,
+  validate,
+  placeholder,
+  example,
+  options,
+  variant = '',
+  note,
+}: DocumentToolProps) {
+  const article = feminine ? 'uma' : 'um'
+  const generatedWord = feminine ? 'geradas' : 'gerados'
   const [masked, setMasked] = useState(true)
   const [quantityText, setQuantityText] = useState('1')
   const [generated, setGenerated] = useState<string[]>(() => [generate()])
@@ -74,7 +104,7 @@ export function DocumentTool({ name, generate, display, validate, placeholder, e
                   wrapperClassName="w-32"
                 />
                 <div className="pt-5">
-                  <Checkbox label="Com máscara" hint="Pontos, barra e hífen." checked={masked} onChange={setMasked} />
+                  {maskable && <Checkbox label="Com máscara" hint={maskHint} checked={masked} onChange={setMasked} />}
                   {options}
                 </div>
               </div>
@@ -85,11 +115,11 @@ export function DocumentTool({ name, generate, display, validate, placeholder, e
             </form>
           </ToolPanel>
           <CodeOutput
-            id={`${name.toLowerCase()}-generated`}
-            label={`${name} gerados`}
+            id={`${slug}-generated`}
+            label={`${name} ${generatedWord}`}
             value={output}
-            placeholder={`Clique em Gerar para criar um ${name}.`}
-            filename={`devdrop-${name.toLowerCase()}.txt`}
+            placeholder={`Clique em Gerar para criar ${article} ${name}.`}
+            filename={`devdrop-${slug}.txt`}
             minHeight="min-h-[120px]"
             actions={<ClearButton onClear={() => setGenerated([])} disabled={generated.length === 0} />}
           />
@@ -109,7 +139,7 @@ export function DocumentTool({ name, generate, display, validate, placeholder, e
             value={candidate}
             onChange={setCandidate}
             placeholder={placeholder}
-            inputMode={name === 'CPF' ? 'numeric' : 'text'}
+            inputMode={numericInput ? 'numeric' : 'text'}
             autoComplete="off"
             spellCheck={false}
             code
@@ -117,7 +147,7 @@ export function DocumentTool({ name, generate, display, validate, placeholder, e
           />
           <div className="mt-4" aria-live="polite">
             {validation === null ? (
-              <EmptyState className="min-h-24">Digite um {name} para conferir os dígitos verificadores.</EmptyState>
+              <EmptyState className="min-h-24">Digite {article} {name} para conferir os dígitos verificadores.</EmptyState>
             ) : validation.valid ? (
               <Notice tone="success" title={validation.message}>
                 <span className="font-mono">{validation.formatted}</span>
@@ -127,14 +157,14 @@ export function DocumentTool({ name, generate, display, validate, placeholder, e
             )}
           </div>
           <p className="mt-4 text-[12px] text-slate-500">
-            A validação é matemática: confere o formato e os dígitos verificadores. Ela não consulta a Receita Federal e,
-            portanto, não diz se o {name} existe ou está ativo.
+            A validação é matemática: confere o formato e os dígitos verificadores. Ela não consulta {authority} e,
+            portanto, não diz se {feminine ? 'a' : 'o'} {name} existe ou está em vigor.
           </p>
         </ToolPanel>
       </div>
 
       <Notice tone="warning" title="Somente para desenvolvimento e testes.">
-        Os números gerados são aleatórios e apenas matematicamente válidos. Por coincidência, podem corresponder a um {name}{' '}
+        Os números gerados são aleatórios e apenas matematicamente válidos. Por coincidência, podem corresponder a {article} {name}{' '}
         real. Não os use em cadastros, compras ou qualquer situação que exija um documento verdadeiro. {note}
       </Notice>
     </div>

@@ -42,7 +42,7 @@ Todas as ferramentas funcionam no navegador, sem enviar dados a servidores.
 | Segurança | `password-generator`, `password-strength` |
 | Texto | `character-counter`, `word-counter`, `case-converter`, `text-reverser`, `remove-accents`, `line-breaks`, `text-splitter`, `sort-lines`, `text-cutter`, `text-to-html`, `word-occurrences`, `char-info`, `number-to-words`, `fancy-letters` |
 | Calculadoras | `percentage`, `rule-of-three` |
-| Geradores de dados | `uuid`, `lorem-ipsum`, `hash-generator`, `cpf`, `cnpj` |
+| Geradores de dados | `uuid`, `lorem-ipsum`, `hash-generator`, `cpf`, `cnpj`, `pis-pasep`, `voter-id`, `renavam`, `cnh` |
 | CSS | `css-shadow`, `css-gradient`, `css-border` |
 
 ## 🗂️ Estrutura

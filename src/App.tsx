@@ -44,6 +44,10 @@ const WordOccurrencesPage = lazy(() => import('./pages/tools/WordOccurrencesPage
 const CharInfoPage = lazy(() => import('./pages/tools/CharInfoPage'))
 const NumberToWordsPage = lazy(() => import('./pages/tools/NumberToWordsPage'))
 const FancyLettersPage = lazy(() => import('./pages/tools/FancyLettersPage'))
+const PisPage = lazy(() => import('./pages/tools/PisPage'))
+const VoterIdPage = lazy(() => import('./pages/tools/VoterIdPage'))
+const RenavamPage = lazy(() => import('./pages/tools/RenavamPage'))
+const CnhPage = lazy(() => import('./pages/tools/CnhPage'))
 
 export default function App() {
   return (
@@ -89,6 +93,10 @@ export default function App() {
                 <Route path="/tools/char-info" element={<CharInfoPage />} />
                 <Route path="/tools/number-to-words" element={<NumberToWordsPage />} />
                 <Route path="/tools/fancy-letters" element={<FancyLettersPage />} />
+                <Route path="/tools/pis-pasep" element={<PisPage />} />
+                <Route path="/tools/voter-id" element={<VoterIdPage />} />
+                <Route path="/tools/renavam" element={<RenavamPage />} />
+                <Route path="/tools/cnh" element={<CnhPage />} />
                 <Route path="/privacidade" element={<PrivacyPage />} />
                 <Route path="/cookies" element={<CookiesPage />} />
                 <Route path="*" element={<NotFoundPage />} />

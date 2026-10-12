@@ -1,11 +1,13 @@
 import { createElement } from 'react'
 import {
   ArrowDownAZ,
+  BadgeCheck,
   Binary,
   Blend,
   Braces,
   Building2,
   CaseSensitive,
+  Car,
   Code,
   CodeXml,
   Database,
@@ -32,6 +34,7 @@ import {
   Split,
   WholeWord,
   WrapText,
+  Vote,
   Wrench,
   type LucideIcon,
 } from 'lucide-react'
@@ -59,6 +62,10 @@ const icons: Record<string, LucideIcon> = {
   'char-info': Info,
   'number-to-words': ListOrdered,
   'fancy-letters': Baseline,
+  'pis-pasep': BadgeCheck,
+  'voter-id': Vote,
+  renavam: Car,
+  cnh: IdCard,
   percentage: Percent,
   'rule-of-three': Equal,
   uuid: Fingerprint,
