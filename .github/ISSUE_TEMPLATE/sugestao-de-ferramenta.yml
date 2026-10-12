@@ -1,0 +1,60 @@
+name: Sugerir uma ferramenta
+description: Conte qual ferramenta você gostaria de ver no DevDrop.
+title: '[Sugestão] '
+labels: ['sugestão de ferramenta']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por sugerir! Cada ideia é lida e organizada aqui no GitHub.
+        Antes de enviar, veja se ela já não foi sugerida nas [issues abertas](https://github.com/CAKeysama/DevDrop/issues?q=is%3Aissue+label%3A%22sugest%C3%A3o+de+ferramenta%22).
+
+  - type: input
+    id: nome
+    attributes:
+      label: Nome da ferramenta
+      description: Como você chamaria essa ferramenta?
+      placeholder: 'Ex.: Conversor de timestamp Unix'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: categoria
+    attributes:
+      label: Categoria
+      description: Em qual parte do DevDrop ela se encaixa melhor?
+      options:
+        - Desenvolvimento
+        - Geradores de dados
+        - CSS
+        - Segurança
+        - Texto
+        - Calculadoras
+        - Outra / não sei
+    validations:
+      required: true
+
+  - type: textarea
+    id: problema
+    attributes:
+      label: Para que serve?
+      description: Que problema ela resolve no seu dia a dia?
+      placeholder: 'Ex.: Vivo copiando timestamps de logs e preciso ver a data legível no meu fuso.'
+    validations:
+      required: true
+
+  - type: textarea
+    id: exemplo
+    attributes:
+      label: Exemplo de uso
+      description: Mostre uma entrada e o resultado que você esperaria. Não cole dados reais ou sensíveis.
+      placeholder: |
+        Entrada: 1760140800
+        Resultado: 11/10/2026 00:00 (horário de Brasília)
+      render: text
+
+  - type: textarea
+    id: referencias
+    attributes:
+      label: Referências (opcional)
+      description: Algum site ou ferramenta parecida que você usa hoje?

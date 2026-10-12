@@ -85,7 +85,7 @@ const sections: LegalSection[] = [
       <>
         <p>
           <strong>Nenhum.</strong> O DevDrop não grava cookies: nem próprios, nem de terceiros, nem de análise, nem de
-          publicidade. O vídeo da página inicial é entregue pela Amazon CloudFront sem gravar cookies, e as fontes vêm do
+          publicidade. Fontes, imagens e o vídeo da página inicial vêm do
           próprio site.
         </p>
       </>

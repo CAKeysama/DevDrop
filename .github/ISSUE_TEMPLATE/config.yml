@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Usar o DevDrop
+    url: https://github.com/CAKeysama/DevDrop#readme
+    about: Veja o que cada ferramenta faz antes de abrir uma issue.

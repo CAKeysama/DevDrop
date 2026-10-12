@@ -5,8 +5,8 @@ import { links } from '../lib/links'
 /*
  * Keep this page true to the code. It states what DevDrop does today: no accounts, no
  * cookies, no analytics, tools that run in the browser, one localStorage key for the theme
- * (lib/theme.ts), a hero video served by a third-party CDN (HeroVideo.tsx) and self-hosted
- * fonts. Adding analytics, a backend, a form or any new third party means updating this
+ * (lib/theme.ts), hosting on Vercel, and every asset (fonts, hero video) served by the site
+ * itself. Adding analytics, a backend, a form or any new third party means updating this
  * page (and /cookies) in the same change.
  */
 
@@ -77,14 +77,17 @@ const sections: LegalSection[] = [
       <>
         <p>
           Como em qualquer site, para entregar as páginas o seu navegador informa dados técnicos ao servidor: endereço IP,
-          data e hora, a página pedida e o tipo de navegador e de sistema. O serviço que hospeda o DevDrop pode registrar
-          esses dados em logs de servidor, usados para manter o site no ar e protegê-lo contra abusos. Não usamos esses
-          registros para identificar você, montar perfis ou fazer publicidade.
+          data e hora, a página pedida e o tipo de navegador e de sistema. O DevDrop é hospedado na{' '}
+          <a href="https://vercel.com/legal/privacy-notice" {...external}>
+            Vercel
+          </a>
+          , que pode registrar esses dados em logs de servidor para manter o site no ar e protegê-lo contra abusos. Os
+          servidores da Vercel podem ficar fora do Brasil. Não usamos esses registros para identificar você, montar
+          perfis ou fazer publicidade.
         </p>
         <p>
-          O vídeo de fundo da página inicial é servido pela rede de distribuição de conteúdo da Amazon (Amazon
-          CloudFront), que recebe esses mesmos dados técnicos ao entregar o arquivo. Ela não grava cookies. As fontes do
-          site são servidas pelo próprio DevDrop, sem Google Fonts.
+          Tudo o que a página carrega (fontes, imagens e o vídeo da página inicial) vem do próprio DevDrop: nenhum outro
+          serviço, como Google Fonts ou redes de anúncios, fica sabendo da sua visita.
         </p>
         <p>
           A base legal para esses registros técnicos é o legítimo interesse em operar e proteger o site (art. 7º, IX, da
@@ -108,8 +111,8 @@ const sections: LegalSection[] = [
     title: 'Compartilhamento',
     content: (
       <p>
-        Não vendemos, alugamos nem compartilhamos dados pessoais. Os únicos terceiros envolvidos são os que entregam o
-        site e o vídeo (hospedagem e CDN), e apenas com os dados técnicos descritos acima.
+        Não vendemos, alugamos nem compartilhamos dados pessoais. O único terceiro envolvido é a Vercel, que hospeda e
+        entrega o site, e apenas com os dados técnicos descritos acima.
       </p>
     ),
   },
@@ -166,7 +169,7 @@ export default function PrivacyPage() {
             nós.
           </li>
           <li>Não usamos cookies. Só guardamos, no seu navegador, o tema que você escolher.</li>
-          <li>O servidor e a CDN do vídeo recebem dados técnicos de acesso (como o IP), como em qualquer site.</li>
+          <li>A hospedagem (Vercel) recebe dados técnicos de acesso, como o IP, como em qualquer site.</li>
         </ul>
       }
       sections={sections}

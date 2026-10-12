@@ -43,13 +43,13 @@ export function CategoryVisual({ id }: { id: CategoryId }) {
     case 'text':
       return (
         <p aria-hidden="true" className="font-display text-[40px] font-medium leading-none tracking-tight text-ink">
-          Aa <span className="text-slate-300">AA aa</span>
+          Aa <span className="text-line-strong">AA aa</span>
         </p>
       )
     case 'calculators':
       return (
         <p aria-hidden="true" className="font-display text-[40px] font-medium leading-none tracking-tight text-ink">
-          25<span className="text-slate-300">%</span>
+          25<span className="text-line-strong">%</span>
           <span className="ml-3 align-middle font-sans text-[13px] font-medium tracking-normal text-subtle">de 480 = 120</span>
         </p>
       )

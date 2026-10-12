@@ -1,0 +1,30 @@
+name: Privacidade e dados (LGPD)
+description: Dúvidas ou pedidos sobre seus dados, conforme a Política de Privacidade.
+title: '[Privacidade] '
+labels: ['privacidade']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Issues são públicas.** Não escreva aqui nome completo, e-mail, CPF ou qualquer dado pessoal.
+        Descreva só o tipo de pedido; combinamos um canal privado para responder, se for preciso.
+
+  - type: dropdown
+    id: pedido
+    attributes:
+      label: Tipo de pedido
+      options:
+        - Dúvida sobre a Política de Privacidade ou de Cookies
+        - Confirmação ou acesso a dados
+        - Correção ou eliminação de dados
+        - Outro
+    validations:
+      required: true
+
+  - type: textarea
+    id: detalhes
+    attributes:
+      label: Detalhes
+      description: Explique o pedido sem incluir dados pessoais.
+    validations:
+      required: true

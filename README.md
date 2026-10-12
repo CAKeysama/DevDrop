@@ -64,3 +64,29 @@ src/
 4. Adicione a ferramenta em `src/data/tools.ts` com `status: 'available'` e o `path`, e um ícone em `components/tools/ToolIcon.tsx`.
 
 Os testes de `data/tools.test.ts` falham se uma ferramenta não tiver rota.
+
+O sitemap é gerado no build a partir de `src/data/tools.ts`, então uma ferramenta nova já entra nele.
+
+## 🚀 Deploy
+
+O site é hospedado na Vercel, ligada a este repositório:
+
+- **Push no `main`** publica em produção; **pull requests** ganham uma URL de preview.
+- O build da Vercel roda `npm run lint && npm test && npm run build` (veja `vercel.json`): se algo falhar, o deploy
+  falha e a versão anterior continua no ar.
+- O GitHub Actions (`.github/workflows/ci.yml`) roda as mesmas verificações em cada push e PR.
+- `vercel.json` também define o fallback de rotas da SPA, os cabeçalhos de segurança (CSP) e o cache dos arquivos.
+  O CSP libera o script inline do `index.html` pelo hash: se você alterar esse script, atualize o hash
+  (o teste `src/deploy.test.ts` avisa).
+- `npm run preview` serve o build com os mesmos cabeçalhos de produção.
+
+## 💡 Sugestões e privacidade
+
+Ideias de ferramentas chegam como issues pelo formulário
+[Sugerir uma ferramenta](https://github.com/CAKeysama/DevDrop/issues/new?template=sugestao-de-ferramenta.yml),
+com a etiqueta `sugestão de ferramenta`. Pedidos sobre dados usam o formulário de privacidade.
+O site não usa cookies nem analytics; detalhes em `/privacidade` e `/cookies`.
+
+## 📄 Licença
+
+Código-fonte visível, mas **proprietário**: todos os direitos reservados. Veja [LICENSE.md](LICENSE.md).

@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from 'motion/react'
 
-const VIDEO_URL =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260505_101331_74f9b798-3f00-4e86-8a01-377aa16ffeaa.mp4'
+/** Served by the site itself (public/media): no third party sees the visit. The MP4 has its
+ *  index at the start (faststart), so it plays before it finishes downloading. */
+const VIDEO_URL = '/media/hero.mp4'
+/** First frame, shown while the video loads and for reduced motion. */
+const POSTER_URL = '/media/hero-poster.webp'
 
 /**
  * Decorative background video. It sits in an absolute layer, so loading or failing
@@ -27,6 +30,7 @@ export function HeroVideo() {
       <video
         ref={ref}
         src={VIDEO_URL}
+        poster={POSTER_URL}
         autoPlay={!reduceMotion}
         loop
         muted
