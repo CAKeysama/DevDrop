@@ -241,6 +241,15 @@ export const tools: Tool[] = [
     keywords: ['extenso', 'numero por extenso', 'escrever numero', 'valor por extenso', 'cheque', 'reais', 'ordinal', 'cardinal', 'por extenso', 'dinheiro', 'recibo', 'contrato', 'moeda'],
   },
   {
+    id: 'fancy-letters',
+    name: 'Letras personalizadas',
+    description: 'Transforma o texto em letras estilizadas (negrito, itálico, gótico, circulado…) para copiar e colar.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/fancy-letters',
+    keywords: ['letras', 'fonte', 'fontes', 'estilizadas', 'negrito', 'italico', 'gotico', 'cursiva', 'bio', 'instagram', 'nick', 'diferentes', 'bonitas', 'unicode', 'riscado', 'sublinhado'],
+  },
+  {
     id: 'text-splitter',
     name: 'Dividir texto',
     description: 'Divide um texto por vírgula, espaço, tab ou outro separador, uma parte por linha.',

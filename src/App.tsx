@@ -43,6 +43,7 @@ const TextToHtmlPage = lazy(() => import('./pages/tools/TextToHtmlPage'))
 const WordOccurrencesPage = lazy(() => import('./pages/tools/WordOccurrencesPage'))
 const CharInfoPage = lazy(() => import('./pages/tools/CharInfoPage'))
 const NumberToWordsPage = lazy(() => import('./pages/tools/NumberToWordsPage'))
+const FancyLettersPage = lazy(() => import('./pages/tools/FancyLettersPage'))
 
 export default function App() {
   return (
@@ -87,6 +88,7 @@ export default function App() {
                 <Route path="/tools/word-occurrences" element={<WordOccurrencesPage />} />
                 <Route path="/tools/char-info" element={<CharInfoPage />} />
                 <Route path="/tools/number-to-words" element={<NumberToWordsPage />} />
+                <Route path="/tools/fancy-letters" element={<FancyLettersPage />} />
                 <Route path="/privacidade" element={<PrivacyPage />} />
                 <Route path="/cookies" element={<CookiesPage />} />
                 <Route path="*" element={<NotFoundPage />} />

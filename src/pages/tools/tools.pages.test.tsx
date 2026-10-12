@@ -15,6 +15,7 @@ import CpfPage from './CpfPage'
 import CssBorderPage from './CssBorderPage'
 import CssGradientPage from './CssGradientPage'
 import CssShadowPage from './CssShadowPage'
+import FancyLettersPage from './FancyLettersPage'
 import HashGeneratorPage from './HashGeneratorPage'
 import LoremIpsumPage from './LoremIpsumPage'
 import LineBreaksPage from './LineBreaksPage'
@@ -76,6 +77,7 @@ const pages: Array<[string, ComponentType]> = [
   ['Contador de ocorrências', WordOccurrencesPage],
   ['Informações de caractere', CharInfoPage],
   ['Número por extenso', NumberToWordsPage],
+  ['Letras personalizadas', FancyLettersPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -354,6 +356,23 @@ describe('number to words', () => {
     await user.paste('1\nabc')
     expect(area('number-to-words-output').value).toBe('primeira\n(número inválido)')
     expect(errorText()).toMatch(/Linha 2/)
+  })
+})
+
+describe('fancy letters', () => {
+  it('shows a sample until you type, then styles your text and copies a style', async () => {
+    const user = open(FancyLettersPage)
+    expect(document.body.textContent).toMatch(/Mostrando um exemplo/)
+
+    await user.click(area('fancy-letters-input'))
+    await user.paste('Ola')
+    const bold = screen.getByRole('img', { name: 'Negrito: Ola' })
+    await waitFor(() => expect(bold.textContent).toBe('\u{1D40E}\u{1D425}\u{1D41A}'))
+    expect(document.body.textContent).not.toMatch(/Mostrando um exemplo/)
+
+    const row = bold.closest('li')!
+    await user.click(within(row).getByRole('button', { name: 'Copiar' }))
+    expect(await clipboard()).toBe('\u{1D40E}\u{1D425}\u{1D41A}')
   })
 })
 
