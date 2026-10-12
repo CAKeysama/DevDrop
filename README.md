@@ -40,7 +40,7 @@ Todas as ferramentas funcionam no navegador, sem enviar dados a servidores.
 |---|---|
 | Desenvolvimento | `json-formatter`, `xml-formatter`, `sql-formatter`, `base64`, `url-encoder`, `jwt-decoder` |
 | Segurança | `password-generator`, `password-strength` |
-| Texto | `character-counter`, `word-counter`, `case-converter`, `text-reverser` |
+| Texto | `character-counter`, `word-counter`, `case-converter`, `text-reverser`, `remove-accents` |
 | Calculadoras | `percentage`, `rule-of-three` |
 | Geradores de dados | `uuid`, `lorem-ipsum`, `hash-generator`, `cpf`, `cnpj` |
 | CSS | `css-shadow`, `css-gradient`, `css-border` |

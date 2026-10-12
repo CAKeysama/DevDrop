@@ -168,6 +168,15 @@ export const tools: Tool[] = [
     path: '/tools/text-reverser',
     keywords: ['inverter', 'inverso', 'reverso', 'reverse', 'espelhar', 'ao contrario', 'de tras para frente', 'palindromo', 'invertido'],
   },
+  {
+    id: 'remove-accents',
+    name: 'Remover acentos',
+    description: 'Tira acentos, til e cedilha de um texto: "ação" vira "acao".',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/remove-accents',
+    keywords: ['acento', 'acentos', 'acentuacao', 'sem acento', 'tirar acento', 'cedilha', 'til', 'diacriticos', 'normalizar', 'slug', 'ascii'],
+  },
 
   {
     id: 'percentage',

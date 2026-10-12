@@ -21,6 +21,7 @@ import PasswordStrengthPage from './PasswordStrengthPage'
 import PercentagePage from './PercentagePage'
 import RuleOfThreePage from './RuleOfThreePage'
 import UuidGeneratorPage from './UuidGeneratorPage'
+import RemoveAccentsPage from './RemoveAccentsPage'
 import TextReverserPage from './TextReverserPage'
 import WordCounterPage from './WordCounterPage'
 
@@ -58,6 +59,7 @@ const pages: Array<[string, ComponentType]> = [
   ['Contador de palavras', WordCounterPage],
   ['Maiúsculas e minúsculas', CaseConverterPage],
   ['Inverter texto', TextReverserPage],
+  ['Remover acentos', RemoveAccentsPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -173,6 +175,19 @@ describe('text transform tools', () => {
     expect(await clipboard()).toBe('mu siod 🚀')
     await user.click(button('Limpar'))
     expect(area('text-reverser-output').value).toBe('')
+  })
+})
+
+describe('remove accents', () => {
+  it('removes accents while typing, can keep the cedilla and reports what changed', async () => {
+    const user = open(RemoveAccentsPage)
+    await user.click(area('remove-accents-input'))
+    await user.paste('Ação é coração')
+    expect(area('remove-accents-output').value).toBe('Acao e coracao')
+    expect(document.body.textContent).toMatch(/5 letras alteradas/)
+
+    await user.click(screen.getByRole('checkbox', { name: 'Manter o ç' }))
+    expect(area('remove-accents-output').value).toBe('Açao e coraçao')
   })
 })
 
