@@ -4,19 +4,20 @@ Um hub centralizado de ferramentas e utilitários projetado para facilitar a vid
 
 ## 🚀 Funcionalidades
 
-O projeto é dividido em categorias para facilitar a navegação:
+Tudo roda no navegador: o que você cola não é enviado a nenhum servidor.
 
-### 💻 Para Desenvolvedores
-*   **Formatadores e Validadores:** JSON, XML, SQL.
-*   **Codificação/Decodificação:** Base64, URL Encode/Decode, JWT Decoder.
-*   **Geradores de Dados Mock:** UUID, Lorem Ipsum, hashes (MD5, SHA-256).
-*   **CSS Tools:** Gerador de sombras, gradientes e bordas.
+### ✅ Disponível
+*   **Formatadores e validadores:** JSON, XML e SQL (vários dialetos), atualizados enquanto você digita.
+*   **Codificação/decodificação:** Base64 (com UTF-8), URL Encode/Decode e decodificador de JWT.
 
-### 🌐 Para Usuários do Dia a Dia
-*   **Segurança:** Gerador de senhas fortes e verificador de força de senha.
-*   **Documentos (Dev/Teste):** Gerador e validador de CPF/CNPJ.
-*   **Texto:** Contador de caracteres, palavras e conversor de maiúsculas/minúsculas.
-*   **Matemática/Finanças:** Calculadora de porcentagem e regras de três.
+### 🕒 Em breve
+*   **Geradores de dados:** UUID, Lorem Ipsum, hashes (MD5, SHA-256), CPF e CNPJ para testes.
+*   **CSS:** gerador de sombras, gradientes e bordas.
+*   **Segurança:** gerador de senhas fortes e verificador de força de senha.
+*   **Texto:** contador de caracteres e de palavras, conversor de maiúsculas/minúsculas.
+*   **Calculadoras:** porcentagem e regra de três.
+
+A lista completa, com o status de cada ferramenta, fica em `src/data/tools.ts`.
 
 ## 🧱 Stack
 

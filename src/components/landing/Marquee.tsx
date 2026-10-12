@@ -40,7 +40,7 @@ function MarqueeCard({ tool, duplicate }: { tool: Tool; duplicate: boolean }) {
           <span className="text-[14px] font-semibold text-ink transition-colors duration-500 group-hover:text-white">
             {tool.name}
           </span>
-          <span className="text-[12px] font-medium text-slate-400 transition-colors duration-500 group-hover:text-white/75">
+          <span className="text-[12px] font-medium text-subtle transition-colors duration-500 group-hover:text-white/75">
             {category.name}
           </span>
         </span>

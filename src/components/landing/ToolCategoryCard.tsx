@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Link } from 'react-router-dom'
-import { getToolHref, getToolsByCategory, type Category } from '../../data/tools'
+import { formatToolCount, getToolHref, getToolsByCategory, type Category } from '../../data/tools'
 import { categoryHref } from '../../lib/links'
 import { cn } from '../../lib/cn'
 import { categoryIcons } from '../tools/categoryIcons'
@@ -44,8 +44,8 @@ export function ToolCategoryCard({ category, featured = false, wide = false, cla
           >
             <Icon aria-hidden="true" className="size-5" />
           </span>
-          <span className={cn('text-[12px] font-semibold', featured ? 'text-white/50' : 'text-slate-400')}>
-            {tools.length === 1 ? '1 ferramenta' : `${tools.length} ferramentas`}
+          <span className={cn('text-[12px] font-semibold', featured ? 'text-white/75' : 'text-muted')}>
+            {formatToolCount(tools)}
           </span>
         </div>
         <h3 className={cn('mt-5 font-display font-medium tracking-tight', featured ? 'text-[28px] sm:text-[34px]' : 'text-[22px]')}>
@@ -70,18 +70,32 @@ export function ToolCategoryCard({ category, featured = false, wide = false, cla
           <ul className={cn('flex flex-wrap gap-2', wide && 'lg:justify-end')}>
             {tools.map((tool) => (
               <li key={tool.id}>
-                <Link
-                  to={getToolHref(tool)}
-                  className={cn(
-                    chip,
-                    'relative z-10',
-                    featured
-                      ? 'border-white/15 bg-white/5 text-white/80 hover:border-white/40 hover:text-white focus-visible:outline-white'
-                      : 'border-slate-200/70 bg-canvas text-slate-600 hover:border-slate-300 hover:text-ink',
-                  )}
-                >
-                  {tool.name}
-                </Link>
+                {tool.status === 'available' ? (
+                  <Link
+                    to={getToolHref(tool)}
+                    className={cn(
+                      chip,
+                      'relative z-10 font-semibold',
+                      featured
+                        ? 'border-white/40 bg-white/10 text-white hover:border-white hover:bg-white/15 focus-visible:outline-white'
+                        : 'border-line-strong bg-white text-ink hover:border-ink',
+                    )}
+                  >
+                    {tool.name}
+                  </Link>
+                ) : (
+                  // Planned tools are not links: they say what is coming without promising a page.
+                  <span
+                    className={cn(
+                      chip,
+                      'relative gap-1.5 border-dashed',
+                      featured ? 'border-white/25 text-white/75' : 'border-slate-300 bg-canvas text-muted',
+                    )}
+                  >
+                    {tool.name}
+                    <span className="text-[10px] font-semibold uppercase tracking-wide">· em breve</span>
+                  </span>
+                )}
               </li>
             ))}
           </ul>

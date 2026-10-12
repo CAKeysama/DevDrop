@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import { Info, Loader2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Info } from 'lucide-react'
 import {
   ClearButton,
   CodeInput,
   CodeOutput,
-  ErrorMessage,
   ExampleButton,
   PasteButton,
+  ToggleGroup,
   ToolShell,
 } from '../../components/tools/shared'
 import {
@@ -17,85 +17,57 @@ import {
   type SqlDialect,
   type SqlKeywordCase,
 } from '../../lib/formatters/sql'
-import { cn } from '../../lib/cn'
+import type { FormatResult } from '../../lib/formatters/json'
+import { useDebouncedValue } from '../../hooks/useDebouncedValue'
+
+type Action = 'format' | 'compact'
 
 export default function SqlFormatterPage() {
   const [input, setInput] = useState('')
-  const [output, setOutput] = useState('')
   const [dialect, setDialect] = useState<SqlDialect>('sql')
   const [indent, setIndent] = useState<2 | 4>(2)
   const [keywordCase, setKeywordCase] = useState<SqlKeywordCase>('upper')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [action, setAction] = useState<Action>('format')
+  const [source, flush] = useDebouncedValue(input)
+  // Result tagged with the source it came from, so an older (slower) run never wins.
+  const [run, setRun] = useState<{ key: string; result: FormatResult | null }>({ key: '', result: null })
 
-  function handleInputChange(value: string) {
-    setInput(value)
-    if (error) setError(null)
-  }
+  const key = JSON.stringify([source, dialect, indent, keywordCase, action])
 
-  async function handleFormat(textToFormat?: string) {
-    const source = textToFormat !== undefined ? textToFormat : input
+  useEffect(() => {
+    let cancelled = false
+    const settle = (result: FormatResult | null) => {
+      if (!cancelled) setRun({ key, result })
+    }
+
     if (!source.trim()) {
-      setError('Insira uma consulta SQL para formatar.')
-      setOutput('')
-      return
-    }
-
-    setLoading(true)
-    setError(null)
-
-    try {
-      const res = await formatSql(source, {
-        dialect,
-        indent,
-        keywordCase,
-      })
-
-      if (res.error) {
-        setError(res.error)
-      } else {
-        setOutput(res.result)
-      }
-    } catch (err) {
-      const e = err instanceof Error ? err : new Error(String(err))
-      setError(`Erro inesperado ao formatar: ${e.message}`)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  function handleCompact() {
-    if (!input.trim()) {
-      setError('Insira uma consulta SQL para compactar.')
-      setOutput('')
-      return
-    }
-
-    setError(null)
-    const res = compactSql(input)
-    if (res.error) {
-      setError(res.error)
+      Promise.resolve(null).then(settle)
+    } else if (action === 'compact') {
+      Promise.resolve(compactSql(source)).then(settle)
     } else {
-      setOutput(res.result)
+      formatSql(source, { dialect, indent, keywordCase }).then(settle, (err: unknown) =>
+        settle({ result: '', error: `Erro inesperado ao formatar: ${err instanceof Error ? err.message : String(err)}` }),
+      )
     }
-  }
 
-  function handleClear() {
-    setInput('')
-    setOutput('')
-    setError(null)
-  }
+    return () => {
+      cancelled = true
+    }
+  }, [key, source, dialect, indent, keywordCase, action])
 
-  async function handleLoadExample() {
-    setInput(SQL_EXAMPLE)
-    setError(null)
-    await handleFormat(SQL_EXAMPLE)
+  const isPending = source !== input || run.key !== key
+  const result = run.result
+  const output = result && !result.error ? result.result : ''
+
+  function handleInsert(value: string) {
+    setInput(value)
+    flush(value)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       e.preventDefault()
-      handleFormat()
+      flush()
     }
   }
 
@@ -103,184 +75,104 @@ export default function SqlFormatterPage() {
     <ToolShell
       toolId="sql-formatter"
       title="Formatador SQL"
-      description="Organiza consultas SQL em vários dialetos e compacta em uma linha."
+      description="Organiza consultas SQL em vários dialetos enquanto você digita, ou compacta em uma linha."
       categoryId="developer"
       metaDescription="Formatador SQL online: embeleze queries SQL para PostgreSQL, MySQL, SQLite, T-SQL e mais. Organização de palavras-chave e indentação."
     >
-      <div className="flex flex-col gap-6">
-        {/* Error message */}
-        {error && <ErrorMessage title="Erro de Formatação SQL" error={error} />}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <CodeInput
+          id="sql-input"
+          label="SQL de entrada"
+          value={input}
+          onChange={setInput}
+          onKeyDown={handleKeyDown}
+          placeholder="SELECT c.nome, COUNT(p.id) AS pedidos FROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id WHERE c.ativo = true GROUP BY c.nome…"
+          error={isPending ? null : result?.error}
+          errorTitle="Não foi possível formatar o SQL"
+          actions={
+            <>
+              <ExampleButton onLoadExample={() => handleInsert(SQL_EXAMPLE)} label="Exemplo" />
+              <PasteButton onPaste={handleInsert} />
+              <ClearButton onClear={() => handleInsert('')} disabled={!input} />
+            </>
+          }
+          footer={
+            <div className="flex flex-col gap-4">
+              <p className="text-[12px] text-subtle">O resultado é atualizado enquanto você digita.</p>
 
-        {/* 2-Column Responsive Workspace */}
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Left Column: Input Card */}
-          <CodeInput
-            id="sql-input"
-            label="SQL de entrada"
-            value={input}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder="SELECT c.nome, COUNT(p.id) AS pedidos FROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id WHERE c.ativo = true GROUP BY c.nome…"
-            error={error}
-            actions={
-              <>
-                <ExampleButton onLoadExample={handleLoadExample} label="Exemplo" disabled={loading} />
-                <PasteButton onPaste={(text) => handleInputChange(text)} disabled={loading} />
-                <ClearButton onClear={handleClear} disabled={(!input && !output) || loading} />
-              </>
-            }
-            footer={
-              <div className="flex flex-col gap-4">
-                <p className="text-[12px] text-slate-400">
-                  Atalho: <kbd className="font-sans font-medium text-slate-600">Ctrl + Enter</kbd> (
-                  <kbd className="font-sans font-medium text-slate-600">⌘ + Enter</kbd> no Mac) executa a ação principal.
-                </p>
+              <div className="flex flex-wrap items-start gap-4">
+                <ToggleGroup
+                  label="Ação"
+                  value={action}
+                  onChange={setAction}
+                  options={[
+                    { value: 'format', label: 'Formatar' },
+                    { value: 'compact', label: 'Compactar em uma linha' },
+                  ]}
+                />
 
-                {/* Options: Dialeto, Indentação, Palavras-chave */}
-                <div className="flex flex-wrap items-center gap-4">
-                  {/* Dialeto */}
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="sql-dialect" className="text-[12px] font-medium text-slate-500">
-                      Dialeto
-                    </label>
-                    <select
-                      id="sql-dialect"
-                      value={dialect}
-                      onChange={(e) => setDialect(e.target.value as SqlDialect)}
-                      className="cursor-pointer rounded-full border border-slate-200/80 bg-white px-3.5 py-1 text-[12px] font-semibold text-ink focus:outline-none focus:ring-1 focus:ring-slate-400 shadow-sm"
-                    >
-                      {SQL_DIALECT_OPTIONS.map((opt) => (
-                        <option key={opt.id} value={opt.id}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Indentação */}
-                  <div className="flex flex-col gap-1.5">
-                    <span className="text-[12px] font-medium text-slate-500">Indentação</span>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => setIndent(2)}
-                        className={cn(
-                          'cursor-pointer rounded-full px-3 py-1 text-[12px] font-semibold transition-all',
-                          indent === 2
-                            ? 'bg-[#0a152d] text-white shadow-sm'
-                            : 'border border-slate-200/80 bg-white text-slate-600 hover:text-ink',
-                        )}
-                      >
-                        2 espaços
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setIndent(4)}
-                        className={cn(
-                          'cursor-pointer rounded-full px-3 py-1 text-[12px] font-semibold transition-all',
-                          indent === 4
-                            ? 'bg-[#0a152d] text-white shadow-sm'
-                            : 'border border-slate-200/80 bg-white text-slate-600 hover:text-ink',
-                        )}
-                      >
-                        4 espaços
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Palavras-chave */}
-                  <div className="flex flex-col gap-1.5">
-                    <span className="text-[12px] font-medium text-slate-500">Palavras-chave</span>
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => setKeywordCase('upper')}
-                        className={cn(
-                          'cursor-pointer rounded-full px-3 py-1 text-[12px] font-semibold transition-all',
-                          keywordCase === 'upper'
-                            ? 'bg-[#0a152d] text-white shadow-sm'
-                            : 'border border-slate-200/80 bg-white text-slate-600 hover:text-ink',
-                        )}
-                      >
-                        MAIÚSCULAS
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setKeywordCase('lower')}
-                        className={cn(
-                          'cursor-pointer rounded-full px-3 py-1 text-[12px] font-semibold transition-all',
-                          keywordCase === 'lower'
-                            ? 'bg-[#0a152d] text-white shadow-sm'
-                            : 'border border-slate-200/80 bg-white text-slate-600 hover:text-ink',
-                        )}
-                      >
-                        minúsculas
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setKeywordCase('preserve')}
-                        className={cn(
-                          'cursor-pointer rounded-full px-3 py-1 text-[12px] font-semibold transition-all',
-                          keywordCase === 'preserve'
-                            ? 'bg-[#0a152d] text-white shadow-sm'
-                            : 'border border-slate-200/80 bg-white text-slate-600 hover:text-ink',
-                        )}
-                      >
-                        Manter
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => handleFormat()}
-                    disabled={loading}
-                    className="cursor-pointer rounded-full bg-[#0a152d] px-5 py-2 text-[13px] font-semibold text-white shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98] disabled:opacity-50"
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="sql-dialect" className="text-[12px] font-medium text-muted">
+                    Dialeto
+                  </label>
+                  <select
+                    id="sql-dialect"
+                    value={dialect}
+                    disabled={action === 'compact'}
+                    onChange={(e) => setDialect(e.target.value as SqlDialect)}
+                    className="cursor-pointer rounded-full border border-line-strong bg-white px-3.5 py-1.5 text-[12px] font-semibold text-ink shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    {loading ? (
-                      <span className="inline-flex items-center gap-1.5">
-                        <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
-                        <span>Formatando…</span>
-                      </span>
-                    ) : (
-                      'Formatar'
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCompact}
-                    disabled={loading}
-                    className="cursor-pointer rounded-full border border-slate-200/80 bg-white px-4 py-2 text-[13px] font-semibold text-slate-700 hover:border-slate-300 hover:text-ink transition-all active:scale-[0.98] disabled:opacity-50"
-                  >
-                    Compactar em uma linha
-                  </button>
+                    {SQL_DIALECT_OPTIONS.map((opt) => (
+                      <option key={opt.id} value={opt.id}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
-                {/* Notice message */}
-                <div className="flex items-start gap-2 rounded-2xl bg-slate-50 p-3 text-[12px] text-slate-500 leading-relaxed border border-slate-200/60">
-                  <Info className="size-4 shrink-0 text-slate-400 mt-0.5" aria-hidden="true" />
-                  <p>
-                    Esta ferramenta apenas reorganiza o texto da consulta. Ela não executa o SQL nem confere se tabelas,
-                    colunas ou a sintaxe estão corretas. Ao compactar, os comentários são removidos.
-                  </p>
-                </div>
+                <ToggleGroup
+                  label="Indentação"
+                  value={indent}
+                  onChange={setIndent}
+                  disabled={action === 'compact'}
+                  options={[
+                    { value: 2, label: '2 espaços' },
+                    { value: 4, label: '4 espaços' },
+                  ]}
+                />
+
+                <ToggleGroup
+                  label="Palavras-chave"
+                  value={keywordCase}
+                  onChange={setKeywordCase}
+                  disabled={action === 'compact'}
+                  options={[
+                    { value: 'upper', label: 'MAIÚSCULAS' },
+                    { value: 'lower', label: 'minúsculas' },
+                    { value: 'preserve', label: 'Manter' },
+                  ]}
+                />
               </div>
-            }
-          />
 
-          {/* Right Column: Output Card */}
-          <CodeOutput
-            id="sql-output"
-            label="Resultado"
-            value={output}
-            placeholder="A consulta formatada aparecerá aqui…"
-            filename="devdrop-consulta.sql"
-            mimeType="application/sql"
-          />
-        </div>
+              <div className="flex items-start gap-2 rounded-2xl border border-slate-200/60 bg-slate-50 p-3 text-[12px] leading-relaxed text-muted">
+                <Info className="mt-0.5 size-4 shrink-0 text-muted" aria-hidden="true" />
+                <p>
+                  Esta ferramenta apenas reorganiza o texto da consulta. Ela não executa o SQL nem confere se tabelas,
+                  colunas ou a sintaxe estão corretas. Ao compactar, os comentários são removidos.
+                </p>
+              </div>
+            </div>
+          }
+        />
+
+        <CodeOutput
+          id="sql-output"
+          label="Resultado"
+          value={output}
+          placeholder="A consulta formatada aparecerá aqui…"
+          filename="devdrop-consulta.sql"
+          mimeType="application/sql"
+        />
       </div>
     </ToolShell>
   )

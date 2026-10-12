@@ -82,17 +82,18 @@ export default function JwtDecoderPage() {
               placeholder="Cole seu token JWT aqui (ex: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIi...)…"
               spellCheck={false}
               autoComplete="off"
-              className="w-full resize-y rounded-2xl border border-slate-200/80 bg-slate-50/60 p-4 font-mono text-[13px] leading-relaxed text-ink min-h-[140px] focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400 break-all"
+              aria-invalid={!!error}
+              aria-describedby={error ? 'jwt-input-error' : undefined}
+              className={`w-full resize-y rounded-2xl border bg-slate-50/60 p-4 font-mono text-[13px] leading-relaxed text-ink min-h-[140px] placeholder:text-subtle focus:bg-white break-all ${error ? 'border-rose-500' : 'border-line-strong'}`}
             />
           </div>
 
-          <p className="mt-2.5 text-[11px] text-slate-400">
+          <ErrorMessage id="jwt-input-error" title="Não foi possível ler o token" error={error} className="mt-3" />
+
+          <p className="mt-2.5 text-[12px] text-subtle">
             O exemplo usa dados fictícios. Evite colar tokens de produção em qualquer site; aqui eles não saem do navegador.
           </p>
         </div>
-
-        {/* Error message */}
-        {error && <ErrorMessage title="Erro ao Decodificar JWT" error={error} />}
 
         {/* Yellow Security Warning */}
         <div className="flex items-start gap-3 rounded-2xl border border-amber-200/90 bg-amber-50/70 p-4 text-[13px] text-amber-950">
@@ -115,42 +116,42 @@ export default function JwtDecoderPage() {
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 pb-4 border-b border-slate-100">
                 {/* Alg */}
                 <div>
-                  <span className="text-[11px] text-slate-400">Algoritmo declarado (alg)</span>
+                  <span className="text-[12px] text-subtle">Algoritmo declarado (alg)</span>
                   <p className="mt-0.5 font-mono text-[14px] font-semibold text-ink">{decoded.algorithm}</p>
                 </div>
 
                 {/* Typ */}
                 <div>
-                  <span className="text-[11px] text-slate-400">Tipo do token (typ)</span>
+                  <span className="text-[12px] text-subtle">Tipo do token (typ)</span>
                   <p className="mt-0.5 font-mono text-[14px] font-semibold text-ink">{decoded.type}</p>
                 </div>
 
                 {/* iat */}
                 <div>
-                  <span className="text-[11px] text-slate-400">Emitido em (iat)</span>
+                  <span className="text-[12px] text-subtle">Emitido em (iat)</span>
                   <p className="mt-0.5 text-[13px] font-medium text-ink">
                     {decoded.issuedAt ? decoded.issuedAt.toLocaleString('pt-BR') : 'Não informado'}
                   </p>
                   {decoded.payload.iat && (
-                    <span className="font-mono text-[11px] text-slate-400">{String(decoded.payload.iat)}</span>
+                    <span className="font-mono text-[12px] text-subtle">{String(decoded.payload.iat)}</span>
                   )}
                 </div>
 
                 {/* exp */}
                 <div>
-                  <span className="text-[11px] text-slate-400">Expira em (exp)</span>
+                  <span className="text-[12px] text-subtle">Expira em (exp)</span>
                   <p className="mt-0.5 text-[13px] font-medium text-ink">
                     {decoded.expiresAt ? decoded.expiresAt.toLocaleString('pt-BR') : 'Sem data de expiração'}
                   </p>
                   {decoded.payload.exp && (
-                    <span className="font-mono text-[11px] text-slate-400">{String(decoded.payload.exp)}</span>
+                    <span className="font-mono text-[12px] text-subtle">{String(decoded.payload.exp)}</span>
                   )}
                 </div>
               </div>
 
               {/* Expiry summary line */}
               <div className="mt-3.5 flex items-center gap-2 text-[12px] text-slate-600">
-                <Clock className="size-3.5 text-slate-400" aria-hidden="true" />
+                <Clock className="size-3.5 text-muted" aria-hidden="true" />
                 <span>
                   {decoded.isExpired === true
                     ? 'O token está expirado.'

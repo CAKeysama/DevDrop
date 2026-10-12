@@ -50,12 +50,12 @@ export function CategoryVisual({ id }: { id: CategoryId }) {
       return (
         <p aria-hidden="true" className="font-display text-[40px] font-medium leading-none tracking-tight text-ink">
           25<span className="text-slate-300">%</span>
-          <span className="ml-3 align-middle font-sans text-[13px] font-medium tracking-normal text-slate-400">de 480 = 120</span>
+          <span className="ml-3 align-middle font-sans text-[13px] font-medium tracking-normal text-subtle">de 480 = 120</span>
         </p>
       )
     case 'data':
       return (
-        <div aria-hidden="true" className="space-y-1.5 overflow-hidden font-mono text-[12px] text-slate-400 sm:text-[13px]">
+        <div aria-hidden="true" className="space-y-1.5 overflow-hidden font-mono text-[12px] text-subtle sm:text-[13px]">
           <p className="truncate text-ink">3f2b8c1e-9a4d-4e7b-b1c6-5d0a7e2f9c84</p>
           <p className="truncate">a81d0c57-62fe-4b39-8e15-c7f4d2903b6a</p>
         </div>
