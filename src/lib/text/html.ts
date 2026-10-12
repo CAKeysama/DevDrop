@@ -40,6 +40,14 @@ Object.assign(NAMED, {
   ' ': 'nbsp',
 })
 
+const RESERVED: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }
+
+/** The named entity of a character (`&ccedil;`, `&lt;`), or `null` when it has none. */
+export function namedEntity(char: string): string | null {
+  if (RESERVED[char]) return RESERVED[char]
+  return NAMED[char] ? `&${NAMED[char]};` : null
+}
+
 /** Escapes what HTML reserves; with `entities`, also writes everything non-ASCII as an entity. */
 export function escapeHtml(text: string, entities: boolean): string {
   let out = ''

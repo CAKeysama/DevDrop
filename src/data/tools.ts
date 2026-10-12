@@ -223,6 +223,15 @@ export const tools: Tool[] = [
     keywords: ['ocorrencia', 'ocorrencias', 'repeticao', 'quantas vezes', 'frequencia', 'buscar', 'procurar', 'palavra', 'contar palavra', 'encontrar', 'destacar'],
   },
   {
+    id: 'char-info',
+    name: 'Informações de caractere',
+    description: 'Mostra o código Unicode, os bytes em UTF-8, a entidade HTML e a categoria de cada caractere.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/char-info',
+    keywords: ['unicode', 'codigo', 'utf-8', 'utf8', 'utf-16', 'ascii', 'caractere', 'codepoint', 'entidade', 'simbolo', 'hexadecimal', 'decimal', 'emoji', 'invisivel', 'bytes'],
+  },
+  {
     id: 'text-splitter',
     name: 'Dividir texto',
     description: 'Divide um texto por vírgula, espaço, tab ou outro separador, uma parte por linha.',

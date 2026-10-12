@@ -41,6 +41,7 @@ const SortLinesPage = lazy(() => import('./pages/tools/SortLinesPage'))
 const TextCutterPage = lazy(() => import('./pages/tools/TextCutterPage'))
 const TextToHtmlPage = lazy(() => import('./pages/tools/TextToHtmlPage'))
 const WordOccurrencesPage = lazy(() => import('./pages/tools/WordOccurrencesPage'))
+const CharInfoPage = lazy(() => import('./pages/tools/CharInfoPage'))
 
 export default function App() {
   return (
@@ -83,6 +84,7 @@ export default function App() {
                 <Route path="/tools/text-cutter" element={<TextCutterPage />} />
                 <Route path="/tools/text-to-html" element={<TextToHtmlPage />} />
                 <Route path="/tools/word-occurrences" element={<WordOccurrencesPage />} />
+                <Route path="/tools/char-info" element={<CharInfoPage />} />
                 <Route path="/privacidade" element={<PrivacyPage />} />
                 <Route path="/cookies" element={<CookiesPage />} />
                 <Route path="*" element={<NotFoundPage />} />

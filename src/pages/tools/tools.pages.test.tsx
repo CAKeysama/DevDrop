@@ -8,6 +8,7 @@ import { validateCnpj } from '../../lib/generators/cnpj'
 import { validateCpf } from '../../lib/generators/cpf'
 import { isUuidV4 } from '../../lib/generators/uuid'
 import CaseConverterPage from './CaseConverterPage'
+import CharInfoPage from './CharInfoPage'
 import CharacterCounterPage from './CharacterCounterPage'
 import CnpjPage from './CnpjPage'
 import CpfPage from './CpfPage'
@@ -72,6 +73,7 @@ const pages: Array<[string, ComponentType]> = [
   ['Cortar texto', TextCutterPage],
   ['Texto para HTML', TextToHtmlPage],
   ['Contador de ocorrências', WordOccurrencesPage],
+  ['Informações de caractere', CharInfoPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -314,6 +316,23 @@ describe('word occurrences', () => {
     await waitFor(() => expect(within(screen.getByText('Ocorrência').parentElement!).getByText('1')).toBeTruthy())
     await user.click(screen.getByRole('checkbox', { name: /Ignorar acentos/ }))
     await waitFor(() => expect(within(screen.getByText('Ocorrências').parentElement!).getByText('2')).toBeTruthy())
+  })
+})
+
+describe('character info', () => {
+  it('describes each code point, stands in for invisible ones and caps the list', async () => {
+    const user = open(CharInfoPage)
+    await user.click(area('char-info-input'))
+    await user.paste('ç🚀 ')
+    await waitFor(() => expect(screen.getAllByRole('row')).toHaveLength(4)) // header + 3
+    expect(screen.getByRole('cell', { name: 'U+00E7' })).toBeTruthy()
+    expect(screen.getByRole('cell', { name: 'F0 9F 9A 80' })).toBeTruthy()
+    expect(screen.getByRole('cell', { name: '&ccedil;' })).toBeTruthy()
+    expect(screen.getByText('invisível')).toBeTruthy() // the space
+    expect(document.body.textContent).toMatch(/3 caracteres/)
+
+    await user.click(button('Limpar'))
+    await waitFor(() => expect(screen.queryAllByRole('row')).toHaveLength(0))
   })
 })
 
