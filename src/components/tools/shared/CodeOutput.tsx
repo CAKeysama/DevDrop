@@ -14,6 +14,8 @@ interface CodeOutputProps {
   mimeType?: string
   className?: string
   minHeight?: string
+  /** Regular text instead of code: reading font, spell-friendly. */
+  prose?: boolean
 }
 
 export function CodeOutput({
@@ -27,6 +29,7 @@ export function CodeOutput({
   mimeType = 'text/plain',
   className,
   minHeight = 'min-h-[220px] md:min-h-[260px]',
+  prose = false,
 }: CodeOutputProps) {
   const generatedId = useId()
   const outputId = explicitId || generatedId
@@ -39,11 +42,11 @@ export function CodeOutput({
       )}
     >
       <div>
-        <div className="flex items-center justify-between gap-2 pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-3">
           <label htmlFor={outputId} className="text-[14px] font-semibold tracking-tight text-ink">
             {label}
           </label>
-          <div className="flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5">
             {actions}
             <CopyButton text={value} disabled={!value} />
             <DownloadButton content={value} filename={filename} mimeType={mimeType} disabled={!value} />
@@ -59,7 +62,8 @@ export function CodeOutput({
             aria-label={label}
             spellCheck={false}
             className={cn(
-              'w-full resize-y rounded-2xl border border-slate-200/80 bg-slate-50/60 p-4 font-mono text-[13px] leading-relaxed text-ink transition-all placeholder:text-slate-400',
+              'w-full resize-y rounded-2xl border border-slate-200/80 bg-slate-50/60 p-4 leading-relaxed text-ink transition-all placeholder:text-slate-400',
+              prose ? 'font-sans text-[15px]' : 'font-mono text-[13px]',
               minHeight,
               'focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400',
               !value && 'text-slate-400',

@@ -25,7 +25,7 @@ export function ToolsBento() {
           </h2>
           <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-muted">
             Busque pelo nome ou escolha uma categoria. São {tools.length} ferramentas em {categories.length}{' '}
-            categorias, ainda em desenvolvimento: cada uma abre por aqui assim que for publicada.
+            categorias, e todas funcionam direto no navegador.
           </p>
         </div>
         <div className="flex flex-col gap-4">

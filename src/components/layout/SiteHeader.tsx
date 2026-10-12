@@ -23,7 +23,7 @@ export function SiteHeader() {
           href={links.docs}
           target="_blank"
           rel="noreferrer"
-          className="rounded-full px-3 py-1.5 text-[12px] font-semibold text-slate-500 transition-colors hover:text-ink"
+          className="rounded-full px-3 py-1.5 text-[12px] font-semibold text-slate-500 transition-colors hover:text-ink max-sm:hidden"
         >
           Docs<span className="sr-only"> (abre em nova aba)</span>
         </a>

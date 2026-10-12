@@ -79,8 +79,8 @@ export default function ToolsPage() {
         <div className="pt-10 md:pt-16">
           <h1 className="font-display text-[36px] font-medium leading-[1.08] tracking-tight text-ink md:text-[52px]">Todas as ferramentas</h1>
           <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted">
-            {tools.length} ferramentas em {categories.length} categorias. Elas ainda estão em desenvolvimento: cada uma
-            abre por aqui assim que for publicada.
+            {tools.length} ferramentas em {categories.length} categorias. Todas funcionam direto no navegador, sem
+            cadastro.
           </p>
         </div>
 

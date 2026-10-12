@@ -13,6 +13,8 @@ interface CodeInputProps {
   className?: string
   readOnly?: boolean
   minHeight?: string
+  /** Regular text instead of code: reading font, spell-friendly. */
+  prose?: boolean
   onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
 }
 
@@ -28,6 +30,7 @@ export function CodeInput({
   className,
   readOnly = false,
   minHeight = 'min-h-[220px] md:min-h-[260px]',
+  prose = false,
   onKeyDown,
 }: CodeInputProps) {
   const generatedId = useId()
@@ -42,11 +45,11 @@ export function CodeInput({
       )}
     >
       <div>
-        <div className="flex items-center justify-between gap-2 pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-3">
           <label htmlFor={inputId} className="text-[14px] font-semibold tracking-tight text-ink">
             {label}
           </label>
-          {actions && <div className="flex items-center gap-1.5">{actions}</div>}
+          {actions && <div className="flex flex-wrap items-center gap-1.5">{actions}</div>}
         </div>
 
         <div className="relative">
@@ -64,7 +67,8 @@ export function CodeInput({
             autoCorrect="off"
             autoCapitalize="off"
             className={cn(
-              'w-full resize-y rounded-2xl border bg-slate-50/60 p-4 font-mono text-[13px] leading-relaxed text-ink transition-all placeholder:text-slate-400',
+              'w-full resize-y rounded-2xl border bg-slate-50/60 p-4 leading-relaxed text-ink transition-all placeholder:text-slate-400',
+              prose ? 'font-sans text-[15px]' : 'font-mono text-[13px]',
               minHeight,
               'focus:border-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-400',
               error ? 'border-rose-300 bg-rose-50/20 focus:border-rose-400 focus:ring-rose-400' : 'border-slate-200/80',

@@ -12,9 +12,9 @@ export function HeroContent() {
       className="relative z-20 flex-1 px-6 sm:px-8 md:px-16 pt-10 sm:pt-12 md:pt-16 flex flex-col items-start"
     >
       <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-slate-200/60 bg-white/80 px-3 py-1.5 text-[12px] font-semibold text-slate-600">
-        <span aria-hidden="true" className="size-1.5 rounded-full bg-amber-500" />
-        Em desenvolvimento
-        <span className="hidden sm:inline">· {tools.length} ferramentas planejadas</span>
+        <span aria-hidden="true" className="size-1.5 rounded-full bg-emerald-500" />
+        {tools.filter((tool) => tool.status === 'available').length} ferramentas
+        <span className="hidden sm:inline">· tudo roda no seu navegador</span>
       </p>
       <h1 className="font-display text-balance text-[30px] leading-[1.1] sm:text-[42px] md:text-[56px] md:leading-[1.05] font-medium tracking-tight text-[#0a1b33]">
         Ferramentas rápidas <br className="hidden sm:block" />

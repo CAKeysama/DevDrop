@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import {
   categories,
@@ -31,6 +32,30 @@ describe('tool registry', () => {
   })
 })
 
+describe('catalog completeness', () => {
+  const app = readFileSync(new URL('../App.tsx', import.meta.url), 'utf-8')
+
+  it('has 21 tools in 6 categories, all available', () => {
+    expect(tools).toHaveLength(21)
+    expect(categories).toHaveLength(6)
+    expect(tools.filter((tool) => tool.status !== 'available')).toEqual([])
+  })
+
+  it('gives every tool its own route, registered in App.tsx', () => {
+    for (const tool of tools) {
+      expect(tool.path).toBe(`/tools/${tool.id}`)
+      expect(app, tool.id).toContain(`path="${tool.path}"`)
+    }
+  })
+
+  it('finds tools by name, alias and category', () => {
+    expect(searchTools('senha').map((tool) => tool.id).sort()).toEqual(['password-generator', 'password-strength'])
+    expect(searchTools('cpf').map((tool) => tool.id)).toEqual(['cpf'])
+    expect(searchTools('md5').map((tool) => tool.id)).toEqual(['hash-generator'])
+    expect(searchTools('', 'css')).toHaveLength(3)
+  })
+})
+
 describe('showcase', () => {
   it('only lists tools that exist in the registry', () => {
     expect(getShowcaseTools()).toHaveLength(showcaseToolIds.length)
@@ -48,8 +73,8 @@ describe('showcase', () => {
   })
 
   it('links a planned tool to its catalog entry', () => {
-    const plannedTool = tools.find((tool) => tool.status === 'planned')!
-    expect(plannedTool).toBeDefined()
+    // Every tool is available today; a planned one would still link to the catalog.
+    const plannedTool = { ...tools[0], status: 'planned' as const }
     expect(getToolHref(plannedTool)).toBe(`/tools?q=${encodeURIComponent(plannedTool.name)}`)
   })
 })

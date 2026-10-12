@@ -57,8 +57,6 @@ export const categories: Category[] = [
   },
 ]
 
-const planned = (tool: Omit<Tool, 'status'>): Tool => ({ ...tool, status: 'planned' })
-
 export const tools: Tool[] = [
   {
     id: 'json-formatter',
@@ -115,25 +113,145 @@ export const tools: Tool[] = [
     keywords: ['jwt', 'token', 'decode', 'decoder', 'claims', 'payload', 'header', 'json web token'],
   },
 
-  planned({ id: 'password-generator', name: 'Gerador de senhas', description: 'Gera senhas fortes.', categoryId: 'security', keywords: ['senha', 'password', 'gerar', 'generator', 'aleatoria'] }),
-  planned({ id: 'password-strength', name: 'Força da senha', description: 'Verifica a força de uma senha.', categoryId: 'security', keywords: ['senha', 'password', 'strength', 'verificador', 'forte'] }),
+  {
+    id: 'password-generator',
+    name: 'Gerador de senhas',
+    description: 'Gera senhas aleatórias fortes, com tamanho e tipos de caracteres à sua escolha.',
+    categoryId: 'security',
+    status: 'available',
+    path: '/tools/password-generator',
+    keywords: ['senha', 'password', 'gerar', 'generator', 'aleatoria', 'random'],
+  },
+  {
+    id: 'password-strength',
+    name: 'Força da senha',
+    description: 'Avalia a força de uma senha e explica o que a enfraquece.',
+    categoryId: 'security',
+    status: 'available',
+    path: '/tools/password-strength',
+    keywords: ['senha', 'password', 'strength', 'verificador', 'checker', 'forte', 'segura'],
+  },
 
-  planned({ id: 'character-counter', name: 'Contador de caracteres', description: 'Conta os caracteres de um texto.', categoryId: 'text', keywords: ['caractere', 'character', 'count', 'tamanho', 'letras'] }),
-  planned({ id: 'word-counter', name: 'Contador de palavras', description: 'Conta as palavras de um texto.', categoryId: 'text', keywords: ['palavra', 'word', 'count'] }),
-  planned({ id: 'case-converter', name: 'Maiúsculas e minúsculas', description: 'Converte um texto entre maiúsculas e minúsculas.', categoryId: 'text', keywords: ['case', 'converter', 'uppercase', 'lowercase', 'caixa alta', 'conversor'] }),
+  {
+    id: 'character-counter',
+    name: 'Contador de caracteres',
+    description: 'Conta caracteres, com e sem espaços, e avisa quando um limite é ultrapassado.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/character-counter',
+    keywords: ['caractere', 'character', 'counter', 'count', 'tamanho', 'letras', 'limite'],
+  },
+  {
+    id: 'word-counter',
+    name: 'Contador de palavras',
+    description: 'Conta palavras, frases, parágrafos e estima o tempo de leitura.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/word-counter',
+    keywords: ['palavra', 'word', 'counter', 'count', 'frases', 'tempo de leitura'],
+  },
+  {
+    id: 'case-converter',
+    name: 'Maiúsculas e minúsculas',
+    description: 'Converte um texto para maiúsculas, minúsculas, título e outros formatos.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/case-converter',
+    keywords: ['case', 'converter', 'uppercase', 'lowercase', 'caixa alta', 'caixa baixa', 'conversor', 'title case'],
+  },
 
-  planned({ id: 'percentage', name: 'Porcentagem', description: 'Calcula porcentagens.', categoryId: 'calculators', keywords: ['porcentagem', 'percentual', 'percentage', 'percent', 'calculadora'] }),
-  planned({ id: 'rule-of-three', name: 'Regra de três', description: 'Resolve proporções com regra de três.', categoryId: 'calculators', keywords: ['regra de tres', 'proporcao', 'rule of three', 'calculadora'] }),
+  {
+    id: 'percentage',
+    name: 'Porcentagem',
+    description: 'Calcula porcentagens, aumentos, descontos e variações, mostrando a conta.',
+    categoryId: 'calculators',
+    status: 'available',
+    path: '/tools/percentage',
+    keywords: ['porcentagem', 'percentual', 'percentage', 'percent', 'calculadora', 'desconto', 'aumento', 'variacao'],
+  },
+  {
+    id: 'rule-of-three',
+    name: 'Regra de três',
+    description: 'Resolve proporções diretas e inversas passo a passo.',
+    categoryId: 'calculators',
+    status: 'available',
+    path: '/tools/rule-of-three',
+    keywords: ['regra de tres', 'proporcao', 'rule of three', 'calculadora', 'proporcional'],
+  },
 
-  planned({ id: 'uuid', name: 'Gerador de UUID', description: 'Gera UUIDs.', categoryId: 'data', keywords: ['uuid', 'guid', 'id', 'gerar', 'generator'] }),
-  planned({ id: 'lorem-ipsum', name: 'Lorem Ipsum', description: 'Gera texto de preenchimento.', categoryId: 'data', keywords: ['lorem', 'ipsum', 'placeholder', 'texto', 'gerador'] }),
-  planned({ id: 'hash-generator', name: 'Gerador de hash', description: 'Gera hashes MD5 e SHA-256.', categoryId: 'data', keywords: ['hash', 'md5', 'sha', 'sha-256', 'generator'] }),
-  planned({ id: 'cpf', name: 'CPF', description: 'Gera e valida CPF para desenvolvimento e testes.', categoryId: 'data', keywords: ['cpf', 'documento', 'gerador', 'validador'] }),
-  planned({ id: 'cnpj', name: 'CNPJ', description: 'Gera e valida CNPJ para desenvolvimento e testes.', categoryId: 'data', keywords: ['cnpj', 'documento', 'gerador', 'validador'] }),
+  {
+    id: 'uuid',
+    name: 'Gerador de UUID',
+    description: 'Gera identificadores UUID v4 aleatórios, um ou vários de uma vez.',
+    categoryId: 'data',
+    status: 'available',
+    path: '/tools/uuid',
+    keywords: ['uuid', 'guid', 'id', 'gerar', 'generator', 'identificador', 'v4'],
+  },
+  {
+    id: 'lorem-ipsum',
+    name: 'Lorem Ipsum',
+    description: 'Gera texto de preenchimento em palavras, frases ou parágrafos.',
+    categoryId: 'data',
+    status: 'available',
+    path: '/tools/lorem-ipsum',
+    keywords: ['lorem', 'ipsum', 'placeholder', 'texto', 'gerador', 'preenchimento'],
+  },
+  {
+    id: 'hash-generator',
+    name: 'Gerador de hash',
+    description: 'Calcula os hashes MD5, SHA-1, SHA-256 e SHA-512 de um texto.',
+    categoryId: 'data',
+    status: 'available',
+    path: '/tools/hash-generator',
+    keywords: ['hash', 'md5', 'sha', 'sha1', 'sha-1', 'sha256', 'sha-256', 'sha512', 'sha-512', 'checksum', 'generator'],
+  },
+  {
+    id: 'cpf',
+    name: 'CPF',
+    description: 'Gera CPFs válidos para testes e confere os dígitos verificadores de um CPF.',
+    categoryId: 'data',
+    status: 'available',
+    path: '/tools/cpf',
+    keywords: ['cpf', 'documento', 'gerador', 'validador', 'generator', 'validar'],
+  },
+  {
+    id: 'cnpj',
+    name: 'CNPJ',
+    description: 'Gera CNPJs válidos para testes e confere os dígitos verificadores de um CNPJ.',
+    categoryId: 'data',
+    status: 'available',
+    path: '/tools/cnpj',
+    keywords: ['cnpj', 'documento', 'gerador', 'validador', 'generator', 'validar', 'empresa', 'alfanumerico'],
+  },
 
-  planned({ id: 'css-shadow', name: 'Gerador de sombras', description: 'Monta sombras em CSS.', categoryId: 'css', keywords: ['css', 'sombra', 'shadow', 'box-shadow'] }),
-  planned({ id: 'css-gradient', name: 'Gerador de gradientes', description: 'Monta gradientes em CSS.', categoryId: 'css', keywords: ['css', 'gradiente', 'gradient', 'cor'] }),
-  planned({ id: 'css-border', name: 'Gerador de bordas', description: 'Monta bordas em CSS.', categoryId: 'css', keywords: ['css', 'borda', 'border', 'radius'] }),
+  {
+    id: 'css-shadow',
+    name: 'Gerador de sombras',
+    description: 'Monta um box-shadow com prévia ao vivo e copia o CSS.',
+    categoryId: 'css',
+    status: 'available',
+    path: '/tools/css-shadow',
+    keywords: ['css', 'sombra', 'shadow', 'box-shadow'],
+  },
+  {
+    id: 'css-gradient',
+    name: 'Gerador de gradientes',
+    description: 'Monta gradientes lineares e radiais com prévia ao vivo e copia o CSS.',
+    categoryId: 'css',
+    status: 'available',
+    path: '/tools/css-gradient',
+    keywords: ['css', 'gradiente', 'gradient', 'cor', 'degrade', 'linear-gradient', 'radial-gradient'],
+  },
+  {
+    id: 'css-border',
+    name: 'Gerador de bordas',
+    description: 'Ajusta espessura, estilo, cor e raio da borda com prévia ao vivo e copia o CSS.',
+    categoryId: 'css',
+    status: 'available',
+    path: '/tools/css-border',
+    keywords: ['css', 'borda', 'border', 'radius', 'border-radius', 'arredondar'],
+  },
 ]
 
 /**
@@ -167,6 +285,13 @@ export function getToolHref(tool: Tool): string {
 
 export function isCategoryId(value: string | null | undefined): value is CategoryId {
   return categories.some((category) => category.id === value)
+}
+
+/** A tool by id. Throws for an unknown id, so a typo in a page fails loudly in tests. */
+export function getTool(id: string): Tool {
+  const tool = tools.find((item) => item.id === id)
+  if (!tool) throw new Error(`Unknown tool id: ${id}`)
+  return tool
 }
 
 export function getCategory(id: CategoryId): Category {
