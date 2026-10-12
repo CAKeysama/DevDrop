@@ -15,6 +15,11 @@
   --color-ink: #0a1b33;
   --color-navy: #0a152d;
   --color-muted: #64748b;
+  /* Lightest gray allowed for text (hints, metadata, placeholders): 4.55:1 on canvas.
+     Do not use slate-300/400 for text — they fail WCAG AA (2.5:1). */
+  --color-subtle: #64748b;
+  /* Border of form controls (inputs, selects, toggles): 3.06:1 on canvas (WCAG 1.4.11). */
+  --color-line-strong: #8391a5;
 
   /* Radius — maximum roundness */
   --radius-card: 32px;
@@ -56,9 +61,16 @@
     overflow-x: hidden;
   }
 
+  /* Global focus ring. Components must not remove it (no `outline-none` on focus). */
   :focus-visible {
     outline: 2px solid var(--color-ink);
     outline-offset: 3px;
+  }
+
+  textarea:focus-visible,
+  input:focus-visible,
+  select:focus-visible {
+    outline-offset: 2px;
   }
 
   ::selection {

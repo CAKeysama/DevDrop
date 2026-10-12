@@ -139,24 +139,19 @@ export const tools: Tool[] = [
 /**
  * Tools shown in the landing page marquee, in order. Ids only — names, categories and
  * links are read from the registry above, so the showcase can never drift from it.
+ * Only available tools belong here: the showcase is a promise of what works today.
  */
 export const showcaseToolIds = [
   'json-formatter',
-  'password-generator',
-  'percentage',
-  'uuid',
-  'case-converter',
-  'css-gradient',
   'jwt-decoder',
-  'cpf',
-  'character-counter',
-  'rule-of-three',
-  'hash-generator',
-  'password-strength',
+  'base64',
+  'sql-formatter',
+  'url-encoder',
+  'xml-formatter',
 ]
 
 export function getShowcaseTools(): Tool[] {
-  return showcaseToolIds.flatMap((id) => tools.find((tool) => tool.id === id) ?? [])
+  return showcaseToolIds.flatMap((id) => tools.find((tool) => tool.id === id && tool.status === 'available') ?? [])
 }
 
 /** Destination of a tool: its own route once available, otherwise its entry in the catalog. */
@@ -173,8 +168,10 @@ export function getCategory(id: CategoryId): Category {
   return categories.find((category) => category.id === id)!
 }
 
+/** Tools of a category, available ones first. */
 export function getToolsByCategory(id: CategoryId): Tool[] {
-  return tools.filter((tool) => tool.categoryId === id)
+  const list = tools.filter((tool) => tool.categoryId === id)
+  return [...list.filter((tool) => tool.status === 'available'), ...list.filter((tool) => tool.status !== 'available')]
 }
 
 function normalize(value: string) {
@@ -185,17 +182,125 @@ function normalize(value: string) {
     .trim()
 }
 
-/** Filters the registry by free text (every term must match) and, optionally, by category. */
+/** Words that carry no meaning in a search ("formatador de json" = "formatador json"). */
+const stopwords = new Set(['a', 'o', 'as', 'os', 'de', 'da', 'do', 'das', 'dos', 'e', 'em', 'um', 'uma', 'para', 'pra', 'com', 'no', 'na', 'online', 'ferramenta'])
+
+/**
+ * Words people type that mean the same thing. A term matches a tool when the term or any
+ * word of its group matches. Groups use the stem, since matching is by prefix.
+ */
+const synonymGroups: string[][] = [
+  ['format', 'prettify', 'pretty', 'beautify', 'embelez', 'indent', 'organiz', 'identar'],
+  ['minif', 'compact', 'comprim', 'uglify'],
+  ['valid', 'verific', 'conferir', 'checar', 'check', 'lint'],
+  ['decod', 'decode', 'decrypt', 'inspec'],
+  ['codific', 'encode', 'encod', 'escap'],
+  ['gera', 'generat', 'criar', 'random', 'aleator'],
+  ['senha', 'password', 'pass'],
+  ['token', 'jwt', 'bearer'],
+  ['contar', 'contador', 'count'],
+  ['calcul', 'calcular'],
+  ['texto', 'text'],
+]
+
+function expand(term: string): string[] {
+  const group = synonymGroups.find((words) =>
+    words.some((word) => term.startsWith(word) || (term.length >= 3 && word.startsWith(term))),
+  )
+  return group ? [term, ...group] : [term]
+}
+
+function commonPrefixLength(a: string, b: string) {
+  let i = 0
+  while (i < a.length && i < b.length && a[i] === b[i]) i++
+  return i
+}
+
+/**
+ * Whether a typed term matches a word of the tool. Besides substrings ("json" in "json"),
+ * it accepts words that share a long root, so "formatar" finds "formatador" and
+ * "decodificar" finds "decodifica".
+ */
+function termMatchesWord(term: string, word: string) {
+  if (word.includes(term)) return true
+  if (term.length < 4) return false
+  const shared = commonPrefixLength(term, word)
+  return shared >= 4 && shared >= Math.min(term.length, word.length) - 3
+}
+
+function tokenize(value: string) {
+  return normalize(value)
+    .split(/[^a-z0-9-]+/)
+    .filter((term) => term && !stopwords.has(term))
+}
+
+interface IndexedTool {
+  tool: Tool
+  nameWords: string[]
+  words: string[]
+}
+
+const index: IndexedTool[] = tools.map((tool) => ({
+  tool,
+  nameWords: tokenize(tool.name),
+  words: tokenize([tool.name, tool.description, getCategory(tool.categoryId).name, ...tool.keywords].join(' ')),
+}))
+
+/** 0 when the term does not match the tool, higher when it matches the name. */
+function scoreTerm(term: string, entry: IndexedTool): number {
+  const variants = expand(term)
+  const matches = (words: string[]) => variants.some((variant) => words.some((word) => termMatchesWord(variant, word)))
+  if (matches(entry.nameWords)) return 3
+  if (matches(entry.words)) return 1
+  return 0
+}
+
+/**
+ * Filters the registry by free text and, optionally, by category. Tools that match every
+ * term come first; if none does, tools matching part of the terms are returned instead, so
+ * a long query never ends in an empty page. Available tools are listed before planned ones.
+ */
 export function searchTools(query: string, categoryId?: CategoryId | null): Tool[] {
-  const terms = normalize(query).split(/\s+/).filter(Boolean)
+  const terms = tokenize(query)
+  const pool = index.filter((entry) => !categoryId || entry.tool.categoryId === categoryId)
+  const byStatus = (a: IndexedTool, b: IndexedTool) =>
+    Number(b.tool.status === 'available') - Number(a.tool.status === 'available')
 
-  return tools.filter((tool) => {
-    if (categoryId && tool.categoryId !== categoryId) return false
-    if (terms.length === 0) return true
+  if (terms.length === 0) return [...pool].sort(byStatus).map((entry) => entry.tool)
 
-    const haystack = normalize(
-      [tool.name, tool.description, getCategory(tool.categoryId).name, ...tool.keywords].join(' '),
-    )
-    return terms.every((term) => haystack.includes(term))
+  const scored = pool.map((entry) => {
+    const scores = terms.map((term) => scoreTerm(term, entry))
+    return {
+      entry,
+      matched: scores.filter(Boolean).length,
+      score: scores.reduce((sum, value) => sum + value, 0),
+    }
   })
+
+  const full = scored.filter((item) => item.matched === terms.length)
+  const results = full.length > 0 ? full : scored.filter((item) => item.matched > 0)
+
+  return results
+    .sort((a, b) => byStatus(a.entry, b.entry) || b.matched - a.matched || b.score - a.score)
+    .map((item) => item.entry.tool)
+}
+
+/** Available tools, in registry order. */
+export function getAvailableTools(): Tool[] {
+  return tools.filter((tool) => tool.status === 'available')
+}
+
+/** Planned tools, in registry order. */
+export function getPlannedTools(): Tool[] {
+  return tools.filter((tool) => tool.status === 'planned')
+}
+
+/** "6 disponíveis · 15 em breve" — the one way the UI counts tools. */
+export function formatToolCount(list: Tool[] = tools): string {
+  const available = list.filter((tool) => tool.status === 'available').length
+  const planned = list.length - available
+  const parts: string[] = []
+  if (available > 0) parts.push(available === 1 ? '1 disponível' : `${available} disponíveis`)
+  if (planned > 0) parts.push(`${planned} em breve`)
+  return parts.join(' · ')
 }
