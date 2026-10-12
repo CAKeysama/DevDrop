@@ -26,6 +26,7 @@ import RemoveAccentsPage from './RemoveAccentsPage'
 import SortLinesPage from './SortLinesPage'
 import TextCutterPage from './TextCutterPage'
 import TextReverserPage from './TextReverserPage'
+import TextToHtmlPage from './TextToHtmlPage'
 import TextSplitterPage from './TextSplitterPage'
 import WordCounterPage from './WordCounterPage'
 
@@ -68,6 +69,7 @@ const pages: Array<[string, ComponentType]> = [
   ['Dividir texto', TextSplitterPage],
   ['Ordem alfabética', SortLinesPage],
   ['Cortar texto', TextCutterPage],
+  ['Texto para HTML', TextToHtmlPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -272,6 +274,24 @@ describe('text cutter', () => {
     await user.clear(field('Ao número'))
     await user.type(field('Ao número'), 'x')
     expect(errorText()).toMatch(/número inteiro maior que zero/)
+  })
+})
+
+describe('text to html', () => {
+  it('escapes and structures the text, links addresses and writes entities', async () => {
+    const user = open(TextToHtmlPage)
+    await user.click(area('text-to-html-input'))
+    await user.paste('a < b & c\n\nveja https://x.com.')
+    expect(area('text-to-html-output').value).toBe('<p>a &lt; b &amp; c</p>\n<p>veja https://x.com.</p>')
+    expect(document.body.textContent).toMatch(/2 parágrafos/)
+
+    await user.click(screen.getByRole('checkbox', { name: /Transformar endereços em links/ }))
+    expect(area('text-to-html-output').value).toContain('<a href="https://x.com">https://x.com</a>.')
+
+    await user.click(screen.getByRole('radio', { name: 'Sem tags' }))
+    expect(area('text-to-html-output').value.startsWith('a &lt; b')).toBe(true)
+    await user.click(button('Copiar'))
+    expect(await clipboard()).toBe(area('text-to-html-output').value)
   })
 })
 

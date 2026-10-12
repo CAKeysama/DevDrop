@@ -29,6 +29,8 @@ interface TextTransformToolProps {
   placeholder?: string
   outputPlaceholder?: string
   filename?: string
+  /** Code-like result (HTML, escapes): monospaced font instead of the reading font. */
+  monospaceOutput?: boolean
 }
 
 /**
@@ -47,6 +49,7 @@ export function TextTransformTool({
   placeholder = 'Digite ou cole o texto aqui',
   outputPlaceholder = 'O resultado aparece aqui enquanto você digita.',
   filename = 'devdrop-texto.txt',
+  monospaceOutput = false,
 }: TextTransformToolProps) {
   const [input, setInput] = useState('')
   const result = transform(input)
@@ -83,7 +86,7 @@ export function TextTransformTool({
           id={`${tool.id}-output`}
           label={outputLabel}
           value={result.output}
-          prose
+          prose={!monospaceOutput}
           placeholder={outputPlaceholder}
           filename={filename}
           footer={

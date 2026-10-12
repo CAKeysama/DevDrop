@@ -205,6 +205,15 @@ export const tools: Tool[] = [
     keywords: ['cortar', 'recortar', 'trecho', 'substring', 'truncar', 'limitar', 'primeiros', 'ultimos', 'caracteres', 'palavras', 'encurtar', 'resumir'],
   },
   {
+    id: 'text-to-html',
+    name: 'Texto para HTML',
+    description: 'Transforma um texto em HTML: escapa os símbolos e cria parágrafos, quebras, links e entidades.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/text-to-html',
+    keywords: ['html', 'converter', 'texto para html', 'escapar', 'entidades', 'paragrafo', 'br', 'tags', 'links', 'encode', 'acentos', 'codificar'],
+  },
+  {
     id: 'text-splitter',
     name: 'Dividir texto',
     description: 'Divide um texto por vírgula, espaço, tab ou outro separador, uma parte por linha.',
