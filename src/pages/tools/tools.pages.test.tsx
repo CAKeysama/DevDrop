@@ -29,6 +29,7 @@ import TextReverserPage from './TextReverserPage'
 import TextToHtmlPage from './TextToHtmlPage'
 import TextSplitterPage from './TextSplitterPage'
 import WordCounterPage from './WordCounterPage'
+import WordOccurrencesPage from './WordOccurrencesPage'
 
 afterEach(cleanup)
 
@@ -70,6 +71,7 @@ const pages: Array<[string, ComponentType]> = [
   ['Ordem alfabética', SortLinesPage],
   ['Cortar texto', TextCutterPage],
   ['Texto para HTML', TextToHtmlPage],
+  ['Contador de ocorrências', WordOccurrencesPage],
   ['Porcentagem', PercentagePage],
   ['Regra de três', RuleOfThreePage],
   ['Gerador de UUID', UuidGeneratorPage],
@@ -292,6 +294,26 @@ describe('text to html', () => {
     expect(area('text-to-html-output').value.startsWith('a &lt; b')).toBe(true)
     await user.click(button('Copiar'))
     expect(await clipboard()).toBe(area('text-to-html-output').value)
+  })
+})
+
+describe('word occurrences', () => {
+  it('counts a word, highlights it and respects whole words and accents', async () => {
+    const user = open(WordOccurrencesPage)
+    await user.click(area('word-occurrences-input'))
+    await user.paste('sol solo girassol Sol café cafe')
+    await user.type(field('Palavra ou frase para contar'), 'sol')
+    await waitFor(() => expect(within(screen.getByText('Ocorrências').parentElement!).getByText('4')).toBeTruthy())
+    expect(document.querySelectorAll('mark')).toHaveLength(4)
+
+    await user.click(screen.getByRole('checkbox', { name: /Só palavras inteiras/ }))
+    await waitFor(() => expect(within(screen.getByText('Ocorrências').parentElement!).getByText('2')).toBeTruthy())
+
+    await user.clear(field('Palavra ou frase para contar'))
+    await user.type(field('Palavra ou frase para contar'), 'cafe')
+    await waitFor(() => expect(within(screen.getByText('Ocorrência').parentElement!).getByText('1')).toBeTruthy())
+    await user.click(screen.getByRole('checkbox', { name: /Ignorar acentos/ }))
+    await waitFor(() => expect(within(screen.getByText('Ocorrências').parentElement!).getByText('2')).toBeTruthy())
   })
 })
 

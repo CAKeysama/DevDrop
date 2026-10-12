@@ -40,6 +40,7 @@ const TextSplitterPage = lazy(() => import('./pages/tools/TextSplitterPage'))
 const SortLinesPage = lazy(() => import('./pages/tools/SortLinesPage'))
 const TextCutterPage = lazy(() => import('./pages/tools/TextCutterPage'))
 const TextToHtmlPage = lazy(() => import('./pages/tools/TextToHtmlPage'))
+const WordOccurrencesPage = lazy(() => import('./pages/tools/WordOccurrencesPage'))
 
 export default function App() {
   return (
@@ -81,6 +82,7 @@ export default function App() {
                 <Route path="/tools/sort-lines" element={<SortLinesPage />} />
                 <Route path="/tools/text-cutter" element={<TextCutterPage />} />
                 <Route path="/tools/text-to-html" element={<TextToHtmlPage />} />
+                <Route path="/tools/word-occurrences" element={<WordOccurrencesPage />} />
                 <Route path="/privacidade" element={<PrivacyPage />} />
                 <Route path="/cookies" element={<CookiesPage />} />
                 <Route path="*" element={<NotFoundPage />} />

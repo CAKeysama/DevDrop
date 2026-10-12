@@ -214,6 +214,15 @@ export const tools: Tool[] = [
     keywords: ['html', 'converter', 'texto para html', 'escapar', 'entidades', 'paragrafo', 'br', 'tags', 'links', 'encode', 'acentos', 'codificar'],
   },
   {
+    id: 'word-occurrences',
+    name: 'Contador de ocorrências',
+    description: 'Conta quantas vezes uma palavra ou frase aparece em um texto, com as ocorrências destacadas.',
+    categoryId: 'text',
+    status: 'available',
+    path: '/tools/word-occurrences',
+    keywords: ['ocorrencia', 'ocorrencias', 'repeticao', 'quantas vezes', 'frequencia', 'buscar', 'procurar', 'palavra', 'contar palavra', 'encontrar', 'destacar'],
+  },
+  {
     id: 'text-splitter',
     name: 'Dividir texto',
     description: 'Divide um texto por vírgula, espaço, tab ou outro separador, uma parte por linha.',
